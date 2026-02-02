@@ -1,0 +1,14 @@
+{
+  "info": {
+    "title": "Sobre Mim",
+    "name": "Gabriel Teixeira de Carvalho",
+    "contact": "Contato",
+    "email": "Email:",
+    "socialLinks": "Redes Sociais",
+    "notice": {
+      "title": "Sobre este projeto",
+      "description": "Este projeto utiliza a API pública jsonplaceholder.typicode para demonstrar requisições HTTP e integração de dados em React. Foi desenvolvido com fins educacionais para aprender React e suas aplicações práticas.",
+      "linkText": "JSONPlaceholder"
+    }
+  }
+}

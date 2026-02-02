@@ -1,0 +1,14 @@
+{
+  "info": {
+    "title": "About Me",
+    "name": "Gabriel Teixeira de Carvalho",
+    "contact": "Contact",
+    "email": "Email:",
+    "socialLinks": "Social Links",
+    "notice": {
+      "title": "About this project",
+      "description": "This project uses the public API jsonplaceholder.typicode to demonstrate HTTP requests and data integration in React. It was developed for educational purposes to learn React and its practical applications.",
+      "linkText": "JSONPlaceholder"
+    }
+  }
+}
