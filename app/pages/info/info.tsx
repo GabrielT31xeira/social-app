@@ -69,33 +69,6 @@ export function Info() {
                             </a>
                         </div>
                     </div>
-
-                    {/* Notice Box */}
-                    <div className="pt-6 border-t border-gray-200 dark:border-gray-700 animate-slide-up" style={{ animationDelay: "0.2s" }}>
-                        <div className="flex gap-3 p-4 bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-700 border-l-4 border-indigo-600 dark:border-indigo-500 rounded">
-                            <svg className="w-5 h-5 text-indigo-600 dark:text-indigo-400 flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                                <path d="M12 9v3m0 4h.01" />
-                                <path d="M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                            </svg>
-                            <div>
-                                <p className="font-semibold text-gray-900 dark:text-gray-100 text-sm mb-1">{t('info.notice.title')}</p>
-                                <p className="text-gray-700 dark:text-gray-200 text-sm leading-relaxed">
-                                    {t('info.notice.description', {
-                                        link: (
-                                            <a 
-                                                href="https://jsonplaceholder.typicode.com/" 
-                                                target="_blank" 
-                                                rel="noreferrer" 
-                                                className="text-indigo-600 dark:text-indigo-400 font-medium hover:text-purple-600 dark:hover:text-purple-400 hover:underline transition-all duration-300"
-                                            >
-                                                {t('info.notice.linkText')}
-                                            </a>
-                                        )
-                                    })}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

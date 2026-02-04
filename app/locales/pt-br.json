@@ -10,5 +10,27 @@
       "description": "Este projeto utiliza a API pública jsonplaceholder.typicode para demonstrar requisições HTTP e integração de dados em React. Foi desenvolvido com fins educacionais para aprender React e suas aplicações práticas.",
       "linkText": "JSONPlaceholder"
     }
+  },
+  "welcome": {
+    "title": "Bem-vindo",
+    "subtitle": "Explore um projeto moderno com React, Tailwind CSS e mais",
+    "features": {
+      "title": "Funcionalidades",
+      "item1": "Autenticação multi-idioma (PT-BR e Inglês)",
+      "item2": "Tema escuro e claro personalizável",
+      "item3": "Design responsivo com Tailwind CSS",
+      "item4": "Integração com APIs externas"
+    },
+    "integration": {
+      "title": "Integração com JSONPlaceholder",
+      "description": "Este projeto integra a API pública JSONPlaceholder, permitindo praticar requisições HTTP, gerenciamento de dados e consumo de APIs em uma aplicação React real.",
+      "link": "Conhecer JSONPlaceholder"
+    },
+    "cta": "Visualizar Perfil"
+  },
+  "home": {
+    "post": {
+        "create": "novo post"
+    }
   }
 }
