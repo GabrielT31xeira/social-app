@@ -32,5 +32,15 @@
     "post": {
         "create": "new post"
     }
+  },
+  "post": {
+    "create": {
+      "main": "New Post",
+      "description": "Description",
+      "title": "Title",
+      "content": "Content",
+      "cancel": "Cancel",
+      "submit": "Submit"
+    }
   }
 }
