@@ -5,12 +5,10 @@ import type {GetPosts} from '~/services/post/sevice';
 
 interface PostListProps {
     maxPosts?: number;
-    refreshInterval?: number;
 }
 
 export default function PostList({
                                      maxPosts,
-                                     refreshInterval
                                  }: PostListProps) {
     const [posts, setPosts] = useState<GetPosts[]>([]);
     const [loading, setLoading] = useState(true);
@@ -35,16 +33,6 @@ export default function PostList({
     useEffect(() => {
         loadPosts();
     }, []);
-
-    useEffect(() => {
-        if (!refreshInterval) return;
-
-        const intervalId = setInterval(() => {
-            loadPosts();
-        }, refreshInterval);
-
-        return () => clearInterval(intervalId);
-    }, [refreshInterval]);
 
     if (loading) {
         return (

@@ -51,7 +51,7 @@ export default function Home() {
             {/* Conteúdo principal - Posts ocupando metade da tela */}
             <PostList
                 maxPosts={15}
-                refreshInterval={60000}/>
+            />
 
             {/* Footer */}
             <footer className="py-6 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 mt-12">
