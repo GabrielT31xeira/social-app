@@ -28,6 +28,38 @@
     },
     "cta": "Visualizar Perfil"
   },
+  "login": {
+    "title": "Bem-vindo de volta",
+    "subtitle": "Faça login na sua conta",
+    "char_name": "Nickname",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Esqueceu a senha?",
+    "submit": "Entrar",
+    "noAccount": "Não tem uma conta?",
+    "signUp": "Cadastre-se"
+  },
+  "register": {
+    "title": "Criar conta",
+    "subtitle": "Cadastre-se para começar",
+    "name": "Nome completo",
+    "namePlaceholder": "Seu nome",
+    "char_name": "Nickname",
+    "email": "E-mail",
+    "emailPlaceholder": "seu@email.com",
+    "password": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "confirmPassword": "Confirmar senha",
+    "confirmPlaceholder": "••••••••",
+    "submit": "Cadastrar",
+    "haveAccount": "Já tem uma conta?",
+    "signIn": "Entrar",
+    "success": "Cadastro realizado com sucesso! Redirecionando...",
+    "passwordMismatch": "As senhas não coincidem.",
+    "errorGeneric": "Erro ao cadastrar. Tente novamente.",
+    "errorUnexpected": "Ocorreu um erro inesperado."
+  },
   "home": {
     "post": {
         "create": "novo post"

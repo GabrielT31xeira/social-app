@@ -28,6 +28,38 @@
     },
     "cta": "View Profile"
   },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Log in to your account",
+    "char_name": "Nickname",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up"
+  },
+  "register": {
+    "title": "Create account",
+    "subtitle": "Sign up to get started",
+    "name": "Full name",
+    "char_name": "Nickname",
+    "namePlaceholder": "Your name",
+    "email": "Email",
+    "emailPlaceholder": "your@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "confirmPassword": "Confirm password",
+    "confirmPlaceholder": "••••••••",
+    "submit": "Sign up",
+    "haveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "success": "Registration successful! Redirecting...",
+    "passwordMismatch": "Passwords do not match.",
+    "errorGeneric": "Registration failed. Please try again.",
+    "errorUnexpected": "An unexpected error occurred."
+  },
   "home": {
     "post": {
         "create": "new post"
