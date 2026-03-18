@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {toast} from 'react-hot-toast';
-import PostService from '~/services/post/postService';
+import {postService} from '~/services/post/postService';
 import type {GetPosts} from '~/services/post/postService';
 
 interface PostListProps {
@@ -19,7 +19,7 @@ export default function PostList({
         setError(null);
 
         try {
-            const allPosts = await PostService.getPosts();
+            const allPosts = await postService.getPosts();
             const limitedPosts = maxPosts ? allPosts.slice(0, maxPosts) : allPosts;
             setPosts(limitedPosts);
         } catch (err: any) {

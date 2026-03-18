@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { postCreateProps } from '~/services/post/postService';
-import PostService from '~/services/post/postService';
+import { postService } from '~/services/post/postService';
 
 export default function PostCreate({ isOpen, onClose }: postCreateProps) {
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function PostCreate({ isOpen, onClose }: postCreateProps) {
 
         try {
             // Chama o serviço
-             await PostService.createPost(formData);
+             await postService.createPost(formData);
 
             // Limpa e fecha
             setFormData({ title: '', body: '', userId: 1 });
