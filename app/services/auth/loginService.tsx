@@ -14,33 +14,49 @@ export interface RegisterPayload {
     password_confirmation: string;
 }
 
-interface User {
+export interface User {
     id: string;
     name: string;
-    email: string;
     char_name: string;
+    email: string;
+    email_verified_at: string | null;
+    created_at: string;
+    updated_at: string;
 }
 
-interface AuthResponse {
-    token: string;
+export interface LoginData {
+    Bearer: string;
     user: User;
 }
 
+export interface LoginResponse {
+    success: true;
+    message: string;
+    data: LoginData;
+}
+
 export const loginService = {
-    async login(data: LoginPayload): Promise<ApiResult<AuthResponse>> {
+    async login(data: LoginPayload): Promise<ApiResult<LoginResponse>> {
         try {
-            const response = await apiClient.post<ApiResult<AuthResponse>>("login", data);
+            const response = await apiClient.post<ApiResult<LoginResponse>>("login", data);
             const res = response.data;
 
             if (res.success) {
-                // salva corretamente (string!)
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user", JSON.stringify(res.data.user));
+                // @ts-ignore
+                const token = res.data.Bearer;
+                // @ts-ignore
+                const user = res.data.user;
+
+                localStorage.setItem("token", token);
+                localStorage.setItem("user", JSON.stringify(user));
             }
 
             return res;
         } catch (error: any) {
-            throw error.response?.data || { success: false, message: "Erro ao fazer login!" };
+            throw error.response?.data || {
+                success: false,
+                message: "Erro ao fazer login!",
+            };
         }
     },
 
@@ -56,7 +72,12 @@ export const loginService = {
 
     async logout(): Promise<ApiResult<null>> {
         try {
-            const response = await apiClient.post<ApiResult<null>>("logout");
+            const response = await apiClient.post<ApiResult<null>>("logout", {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem("token")}`,
+                    }
+                });
 
             // limpa storage independente da resposta
             localStorage.removeItem("token");
@@ -68,22 +89,22 @@ export const loginService = {
         }
     },
 
-    async refreshToken(): Promise<ApiResult<AuthResponse>> {
-        try {
-            const response = await apiClient.post<ApiResult<AuthResponse>>("refresh");
-
-            const res = response.data;
-
-            if (res.success) {
-                localStorage.setItem("token", res.data.token);
-                localStorage.setItem("user", JSON.stringify(res.data.user));
-            }
-
-            return res;
-        } catch (error: any) {
-            throw error.response?.data || { success: false, message: "Erro ao atualizar token!" };
-        }
-    },
+    // async refreshToken(): Promise<ApiResult<null>> {
+    //     try {
+    //         const response = await apiClient.post<ApiResult<null>>("refresh");
+    //
+    //         const res = response.data;
+    //
+    //         if (res.success) {
+    //             localStorage.setItem("token", res.data.token);
+    //             localStorage.setItem("user", JSON.stringify(res.data.user));
+    //         }
+    //
+    //         return res;
+    //     } catch (error: any) {
+    //         throw error.response?.data || { success: false, message: "Erro ao atualizar token!" };
+    //     }
+    // },
 
     getUser() {
         if (typeof window === "undefined") return null;

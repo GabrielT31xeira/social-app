@@ -30,21 +30,11 @@ export function LoginPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Validação simples local
-        if (!formData.char_name.trim() || !formData.password.trim()) {
-            toast.error(t('login.fieldsRequired'));
-            return;
-        }
-
         setLoading(true);
         try {
             const result = await loginService.login(formData);
 
             if (result.success) {
-                // Salva o token (ajuste conforme a estrutura da sua API)
-                if (result.data?.token) {
-                    localStorage.setItem('token', result.data.token);
-                }
                 toast.success(t('login.success'));
                 // Redireciona para a página principal (ou para onde o usuário estava)
                 setTimeout(() => navigate('/home'), 1500);

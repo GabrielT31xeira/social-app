@@ -24,12 +24,24 @@ export default function HomePage() {
                 <header className="bg-white dark:bg-gray-800 shadow-lg animate-slide-up">
                     <div className="max-w-7xl mx-auto px-4 py-5">
                         <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-4">
+                            <div className="flex flex-col items-start gap-1">
                                 <div>
                                     <h1 className="font-bold text-gray-800 dark:text-white text-xl">
                                         {userData ? userData.char_name : "User not found"}
                                     </h1>
                                 </div>
+
+                                {userData && (
+                                    <button
+                                        onClick={() => {
+                                            loginService.logout();
+                                            navigate("/home");
+                                        }}
+                                        className="text-sm text-blue-600 hover:underline px-2 py-1"
+                                    >
+                                        logout
+                                    </button>
+                                )}
                             </div>
 
                             <div className="flex items-center gap-4">
