@@ -30,7 +30,6 @@ export const loginService = {
     async login(data: LoginPayload): Promise<ApiResult<AuthResponse>> {
         try {
             const response = await apiClient.post<ApiResult<AuthResponse>>("login", data);
-
             const res = response.data;
 
             if (res.success) {
@@ -86,11 +85,16 @@ export const loginService = {
         }
     },
 
-    getUser(): User | null {
-        const user = localStorage.getItem("user");
+    getUser() {
+        if (typeof window === "undefined") return null;
 
-        return user ? JSON.parse(user) : null;
-    },
+        try {
+            const user = localStorage.getItem("user");
+            return user ? JSON.parse(user) : null;
+        } catch {
+            return null;
+        }
+    }
 };
 
 export default loginService;

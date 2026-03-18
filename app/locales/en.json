@@ -28,18 +28,6 @@
     },
     "cta": "View Profile"
   },
-  "login": {
-    "title": "Welcome back",
-    "subtitle": "Log in to your account",
-    "char_name": "Nickname",
-    "emailPlaceholder": "your@email.com",
-    "password": "Password",
-    "passwordPlaceholder": "••••••••",
-    "forgotPassword": "Forgot password?",
-    "submit": "Sign in",
-    "noAccount": "Don't have an account?",
-    "signUp": "Sign up"
-  },
   "register": {
     "title": "Create account",
     "subtitle": "Sign up to get started",
@@ -74,5 +62,24 @@
       "cancel": "Cancel",
       "submit": "Submit"
     }
+  },
+  "common": {
+    "loading": "Loading..."
+  },
+  "login": {
+    "title": "Welcome back",
+    "subtitle": "Log in to your account",
+    "char_name": "Character name",
+    "char_namePlaceholder": "Your character name",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Forgot password?",
+    "submit": "Sign in",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "fieldsRequired": "Please fill in all fields",
+    "success": "Login successful! Redirecting...",
+    "errorGeneric": "Login failed. Please try again.",
+    "errorUnexpected": "An unexpected error occurred."
   }
 }

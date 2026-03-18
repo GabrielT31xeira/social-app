@@ -1,9 +1,69 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { LanguageSwitcher } from '../../components/LanguageSwitcher';
 import { ThemeSwitcher } from '../../components/ThemeSwitcher';
+import { loginService } from '~/services/auth/login'; // ajuste o caminho
+import type { LoginPayload } from '~/services/auth/login'
 
 export function Login() {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    // Estado do formulário
+    const [formData, setFormData] = useState<LoginPayload>({
+        char_name: '',
+        password: '',
+    });
+
+    // Estados de UI
+    const [loading, setLoading] = useState(false);
+
+    // Atualiza os campos
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    // Submissão
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        // Validação simples local
+        if (!formData.char_name.trim() || !formData.password.trim()) {
+            toast.error(t('login.fieldsRequired'));
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const result = await loginService.login(formData);
+
+            if (result.success) {
+                // Salva o token (ajuste conforme a estrutura da sua API)
+                if (result.data?.token) {
+                    localStorage.setItem('token', result.data.token);
+                }
+                toast.success(t('login.success'));
+                // Redireciona para a página principal (ou para onde o usuário estava)
+                setTimeout(() => navigate('/home'), 1500);
+            } else {
+                // Tratamento de erros da API
+                if (result.errors && typeof result.errors === 'object') {
+                    // Se houver erros por campo, mostra o primeiro
+                    const firstError = Object.values(result.errors).flat()[0];
+                    toast.error(firstError || result.message || t('login.errorGeneric'));
+                } else {
+                    toast.error(result.message || t('login.errorGeneric'));
+                }
+            }
+        } catch (err: any) {
+            toast.error(err.message || t('login.errorUnexpected'));
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <main className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:bg-slate-900">
@@ -22,7 +82,7 @@ export function Login() {
 
                 {/* Form */}
                 <div className="p-8">
-                    <form className="space-y-6">
+                    <form onSubmit={handleSubmit} className="space-y-6">
                         {/* char_name */}
                         <div>
                             <label htmlFor="char_name" className="block text-sm font-semibold text-gray-800 dark:text-gray-200 uppercase tracking-wider opacity-75 mb-2">
@@ -31,15 +91,18 @@ export function Login() {
                             <div className="relative">
                                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500 dark:text-gray-400">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                                        <polyline points="22,6 12,13 2,6" />
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
                                     </svg>
                                 </span>
                                 <input
-                                    type="char_name"
+                                    type="text"
                                     id="char_name"
+                                    name="char_name"
+                                    value={formData.char_name}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg bg-transparent dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-300"
-                                    placeholder={t('login.char_name')}
+                                    placeholder={t('login.char_namePlaceholder')}
                                 />
                             </div>
                         </div>
@@ -59,6 +122,9 @@ export function Login() {
                                 <input
                                     type="password"
                                     id="password"
+                                    name="password"
+                                    value={formData.password}
+                                    onChange={handleChange}
                                     className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-lg bg-transparent dark:text-gray-100 focus:border-indigo-500 dark:focus:border-indigo-400 focus:outline-none transition-colors duration-300"
                                     placeholder={t('login.passwordPlaceholder')}
                                 />
@@ -75,9 +141,10 @@ export function Login() {
                         {/* Submit button */}
                         <button
                             type="submit"
-                            className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-300 transform hover:scale-[1.02]"
+                            disabled={loading}
+                            className="w-full py-3 px-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition-all duration-300 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {t('login.submit')}
+                            {loading ? t('common.loading') : t('login.submit')}
                         </button>
                     </form>
 

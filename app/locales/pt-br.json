@@ -28,18 +28,6 @@
     },
     "cta": "Visualizar Perfil"
   },
-  "login": {
-    "title": "Bem-vindo de volta",
-    "subtitle": "Faça login na sua conta",
-    "char_name": "Nickname",
-    "emailPlaceholder": "seu@email.com",
-    "password": "Senha",
-    "passwordPlaceholder": "••••••••",
-    "forgotPassword": "Esqueceu a senha?",
-    "submit": "Entrar",
-    "noAccount": "Não tem uma conta?",
-    "signUp": "Cadastre-se"
-  },
   "register": {
     "title": "Criar conta",
     "subtitle": "Cadastre-se para começar",
@@ -74,5 +62,24 @@
       "cancel": "Cancelar",
       "submit": "Enviar"
     }
+  },
+  "common": {
+    "loading": "Carregando..."
+  },
+  "login": {
+    "title": "Bem-vindo de volta",
+    "subtitle": "Faça login na sua conta",
+    "char_name": "Nome do personagem",
+    "char_namePlaceholder": "Seu nome de personagem",
+    "password": "Senha",
+    "passwordPlaceholder": "••••••••",
+    "forgotPassword": "Esqueceu a senha?",
+    "submit": "Entrar",
+    "noAccount": "Não tem uma conta?",
+    "signUp": "Cadastre-se",
+    "fieldsRequired": "Preencha todos os campos",
+    "success": "Login realizado com sucesso! Redirecionando...",
+    "errorGeneric": "Erro ao fazer login. Tente novamente.",
+    "errorUnexpected": "Ocorreu um erro inesperado."
   }
 }
