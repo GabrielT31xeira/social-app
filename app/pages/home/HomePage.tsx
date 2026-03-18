@@ -1,21 +1,19 @@
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {LanguageSwitcher} from '../../components/LanguageSwitcher';
-import {ThemeSwitcher} from '../../components/ThemeSwitcher';
-import PostCreate from '../../components/post/create';
-import PostList from '../../components/post/home';
+import {LanguageSwitcher} from '~/components/LanguageSwitcher';
+import {ThemeSwitcher} from '~/components/ThemeSwitcher';
+import PostCreate from '~/components/post/create';
+import PostList from '~/components/post/home';
 import {useNavigate} from "react-router";
-import loginService from "~/services/auth/login";
+import loginService from "~/services/auth/loginService";
 
-export default function Home() {
+export default function HomePage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {t} = useTranslation();
 
     // Dentro do componente
     const navigate = useNavigate();
-
-    // const token = localStorage.getItem('token');
 
     const userData = loginService.getUser();
 

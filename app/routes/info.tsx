@@ -1,5 +1,5 @@
-import { Info } from "../pages/info/info";
+import { InfoPage } from "~/pages/info/InfoPage";
 
 export default function Details() {
-  return <Info />;
+  return <InfoPage />;
 }

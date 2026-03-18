@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {toast} from 'react-hot-toast';
-import PostService from '~/services/post/sevice';
-import type {GetPosts} from '~/services/post/sevice';
+import PostService from '~/services/post/postService';
+import type {GetPosts} from '~/services/post/postService';
 
 interface PostListProps {
     maxPosts?: number;

@@ -113,7 +113,7 @@ Componente de toggle para trocar entre idiomas:
 ```tsx
 import { LanguageSwitcher } from '../../components/LanguageSwitcher';
 
-export function Info() {
+export function InfoPage() {
   return (
     <div>
       <LanguageSwitcher />

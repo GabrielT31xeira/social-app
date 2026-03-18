@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { LanguageSwitcher } from '../../components/LanguageSwitcher';
-import { ThemeSwitcher } from '../../components/ThemeSwitcher';
-import { loginService } from '~/services/auth/login'; // ajuste o caminho
-import type { LoginPayload } from '~/services/auth/login'
+import { LanguageSwitcher } from '~/components/LanguageSwitcher';
+import { ThemeSwitcher } from '~/components/ThemeSwitcher';
+import { loginService } from '~/services/auth/loginService';
+import type { LoginPayload } from '~/services/auth/loginService'
 
-export function Login() {
+export function LoginPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
 

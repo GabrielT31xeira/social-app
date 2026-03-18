@@ -1,4 +1,4 @@
-import apiClient from '../api/client';
+import apiClient from '~/services/api/apiClient';
 
 export interface postCreateProps {
     isOpen: boolean;
@@ -18,8 +18,8 @@ interface RegisterData {
     userId: number;
 }
 
-class PostService {
-    static async getPosts() {
+export const postService = {
+    async getPosts() {
         try {
             const response = await apiClient.get<GetPosts[]>('posts');
 
@@ -40,10 +40,9 @@ class PostService {
 
             throw new Error(`Falha ao carregar posts: ${errorMessage}`);
         }
-    }
+    },
 
-
-    static async createPost(data: RegisterData) {
+    async createPost(data: RegisterData) {
         try {
             const response = await apiClient.post('posts', data);
             return response.data;
@@ -52,5 +51,3 @@ class PostService {
         }
     }
 }
-
-export default PostService;

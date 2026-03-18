@@ -2,14 +2,12 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
-import { LanguageSwitcher } from '../../components/LanguageSwitcher';
-import { ThemeSwitcher } from '../../components/ThemeSwitcher';
-import type {RegisterPayload} from '~/services/auth/login'; // ajuste o caminho
-// ajuste o caminho
-import { loginService } from '~/services/auth/login';
-import apiClient from "~/services/api/client";
+import { LanguageSwitcher } from '~/components/LanguageSwitcher';
+import { ThemeSwitcher } from '~/components/ThemeSwitcher';
+import type {RegisterPayload} from '~/services/auth/loginService';
+import { loginService } from '~/services/auth/loginService';
 
-export function Register() {
+export function RegisterPage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
 

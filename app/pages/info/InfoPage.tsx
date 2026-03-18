@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from '../../components/LanguageSwitcher';
-import { ThemeSwitcher } from '../../components/ThemeSwitcher';
+import { LanguageSwitcher } from '~/components/LanguageSwitcher';
+import { ThemeSwitcher } from '~/components/ThemeSwitcher';
 
-export function Info() {
+export function InfoPage() {
     const { t } = useTranslation();
 
     return (

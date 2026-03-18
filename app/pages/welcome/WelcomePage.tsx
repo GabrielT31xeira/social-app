@@ -1,9 +1,9 @@
 import { useTranslation } from 'react-i18next';
-import { LanguageSwitcher } from '../../components/LanguageSwitcher';
-import { ThemeSwitcher } from '../../components/ThemeSwitcher';
+import { LanguageSwitcher } from '~/components/LanguageSwitcher';
+import { ThemeSwitcher } from '~/components/ThemeSwitcher';
 import { Link } from 'react-router';
 
-export function Welcome() {
+export function WelcomePage() {
   const { t } = useTranslation();
 
   return (

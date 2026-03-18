@@ -1,5 +1,5 @@
-import Home from "../pages/home/home";
+import HomePage from "~/pages/home/HomePage";
 
 export default function Project() {
-  return <Home />;
+  return <HomePage />;
 }

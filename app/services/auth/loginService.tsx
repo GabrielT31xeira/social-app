@@ -1,5 +1,5 @@
-import apiClient from "~/services/api/client";
-import type {ApiResult} from "~/services/interfaces/responses";
+import apiClient from "~/services/api/apiClient";
+import type {ApiResult} from "~/services/api/responses";
 
 export interface LoginPayload {
     char_name: string;

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { postCreateProps } from '~/services/post/sevice';
-import PostService from '~/services/post/sevice';
+import type { postCreateProps } from '~/services/post/postService';
+import PostService from '~/services/post/postService';
 
 export default function PostCreate({ isOpen, onClose }: postCreateProps) {
     const [loading, setLoading] = useState(false);
