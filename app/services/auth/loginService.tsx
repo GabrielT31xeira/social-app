@@ -40,10 +40,9 @@ export const loginService = {
         try {
             const response = await apiClient.post<ApiResult<LoginResponse>>("login", data);
             const res = response.data;
-
             if (res.success) {
                 // @ts-ignore
-                const token = res.data.Bearer;
+                const token = res.data.access_token;
                 // @ts-ignore
                 const user = res.data.user;
 

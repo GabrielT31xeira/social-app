@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { postCreateProps } from '~/services/post/postService';
+import type {CreatePostPayload, postCreateProps} from '~/services/post/postService';
 import { postService } from '~/services/post/postService';
+import {toast} from "react-toastify";
 
 export default function PostCreate({ isOpen, onClose }: postCreateProps) {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const { t } = useTranslation();
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<CreatePostPayload>({
         title: '',
-        body: '',
-        userId: 1
+        content: '',
+        type_id: 1
     });
 
     const handleChange = (e: any) => {
@@ -29,13 +30,25 @@ export default function PostCreate({ isOpen, onClose }: postCreateProps) {
 
         try {
             // Chama o serviço
-             await postService.createPost(formData);
+            const result = await postService.createPost(formData);
+            if (result.success) {
+                toast.success(result.message);
+                onClose();
+            } else {
+                // Tratamento de erros da API
+                if (result.errors && typeof result.errors === 'object') {
+                    // Se houver erros por campo, mostra o primeiro
+                    const firstError = Object.values(result.errors).flat()[0];
+                    toast.error(firstError || result.message );
+                } else {
+                    toast.error(result.message);
+                }
+            }
 
             // Limpa e fecha
-            setFormData({ title: '', body: '', userId: 1 });
-            onClose();
+            setFormData({ title: '', content: '', type_id: 0 });
         } catch (err: any) {
-            setError(err.response?.data?.message || 'Erro ao criar post');
+            setError(err.response?.data?.message);
         } finally {
             setLoading(false);
         }
@@ -80,7 +93,6 @@ export default function PostCreate({ isOpen, onClose }: postCreateProps) {
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
-                                required
                                 className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
                             />
                         </div>
@@ -92,10 +104,9 @@ export default function PostCreate({ isOpen, onClose }: postCreateProps) {
                             </label>
                             <input
                                 type="text"
-                                name="body"
-                                value={formData.body}
+                                name="content"
+                                value={formData.content}
                                 onChange={handleChange}
-                                required
                                 className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition-all"
                             />
                         </div>

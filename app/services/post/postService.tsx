@@ -6,32 +6,49 @@ export interface postCreateProps {
 }
 
 export interface GetPosts {
-    id: number;
+    id: string;
     title: string;
     body: string;
-    userId: number;
+    userId: string;
+    userName: string;
 }
 
-interface RegisterData {
+export interface CreatePostPayload {
     title: string;
-    body: string;
-    userId: number;
+    content: string;
+    type_id: number;
 }
+
 
 export const postService = {
-    async getPosts() {
+    async getPosts(url?: string) {
         try {
-            const response = await apiClient.get<GetPosts[]>('posts');
+            const isFullUrl = url?.startsWith('http');
 
-            const posts: GetPosts[] = response.data.map(post => {
-                return {
-                    id: Number(post.id) || 0,
-                    title: String(post.title || 'Sem título'),
-                    body: String(post.body || ''),
-                    userId: Number(post.userId) || 0
-                };
-            });
-            return posts;
+            const response = await apiClient.get(
+                isFullUrl ? url : 'posts',
+                {
+                    headers: {
+                        Authorization: 'Bearer ' + localStorage.getItem('token'),
+                    }
+                }
+            );
+
+            const apiResponse = response.data;
+
+            const posts = apiResponse.data.map((post: any) => ({
+                id: post.id,
+                title: post.title,
+                body: post.content,
+                userId: post.user_id,
+                userName: post.user?.char_name
+            }));
+
+            return {
+                posts,
+                meta: apiResponse.meta,
+                links: apiResponse.links
+            };
 
         } catch (error: any) {
             const errorMessage = error.response?.data?.message
@@ -42,12 +59,19 @@ export const postService = {
         }
     },
 
-    async createPost(data: RegisterData) {
+    async createPost(data: CreatePostPayload) {
         try {
-            const response = await apiClient.post('posts', data);
+            const response = await apiClient.post('post/store', data, {
+                headers: {
+                    'Authorization' : 'Bearer ' + localStorage.getItem("token")
+                }
+            });
             return response.data;
-        } catch (error) {
-            throw new Error('Erro ao criar post');
+        } catch (error: any) {
+            return error.response?.data || {
+                success: false,
+                message: "Erro ao fazer a publicação!",
+            };
         }
     }
 }

@@ -60,7 +60,11 @@
       "title": "Título",
       "content": "Conteúdo",
       "cancel": "Cancelar",
-      "submit": "Enviar"
+      "submit": "Enviar",
+      "sucess": "Publicação enviada!"
+    },
+    "error": {
+      "create": "Erro ao criar o post tente novamente mais tarde!"
     }
   },
   "common": {

@@ -60,7 +60,11 @@
       "title": "Title",
       "content": "Content",
       "cancel": "Cancel",
-      "submit": "Submit"
+      "submit": "Submit",
+      "sucess": "New post created!"
+    },
+    "error": {
+      "create": "Error creating the post, please try again later!"
     }
   },
   "common": {
