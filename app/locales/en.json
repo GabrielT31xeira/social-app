@@ -4,6 +4,8 @@
     "name": "Gabriel Teixeira de Carvalho",
     "contact": "Contact",
     "email": "Email:",
+    "githubAria": "GitHub profile",
+    "linkedinAria": "LinkedIn profile",
     "socialLinks": "Social Links",
     "notice": {
       "title": "About this project",
@@ -14,6 +16,7 @@
   "welcome": {
     "title": "Welcome",
     "subtitle": "Explore a modern project with React, Tailwind CSS and more",
+    "home": "Home",
     "features": {
       "title": "Features",
       "item1": "Multi-language support (Portuguese and English)",
@@ -37,9 +40,9 @@
     "email": "Email",
     "emailPlaceholder": "your@email.com",
     "password": "Password",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "********",
     "confirmPassword": "Confirm password",
-    "confirmPlaceholder": "••••••••",
+    "confirmPlaceholder": "********",
     "submit": "Sign up",
     "haveAccount": "Already have an account?",
     "signIn": "Sign in",
@@ -49,8 +52,12 @@
     "errorUnexpected": "An unexpected error occurred."
   },
   "home": {
+    "guest": "Guest",
+    "logout": "Logout",
+    "createPost": "+ Create Post",
+    "footer": "(c) {{year}} {{name}} Blog",
     "post": {
-        "create": "new post"
+      "create": "new post"
     }
   },
   "post": {
@@ -65,10 +72,35 @@
     },
     "error": {
       "create": "Error creating the post, please try again later!"
+    },
+    "feed": {
+      "loadErrorToast": "Failed to load posts",
+      "loadErrorTitle": "Error loading posts",
+      "emptyTitle": "No posts available",
+      "emptyDescription": "There are no posts to display right now.",
+      "badge": "Post",
+      "pagination": "Page {{currentPage}} of {{lastPage}} Total: {{total}} posts"
     }
   },
   "common": {
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "retry": "Try again",
+    "previous": "Previous",
+    "next": "Next"
+  },
+  "theme": {
+    "loading": "Theme",
+    "light": "Light",
+    "dark": "Dark",
+    "toggleAria": "Toggle theme",
+    "toggleTitle": "Toggle theme"
+  },
+  "language": {
+    "loading": "Language",
+    "pt": "PT",
+    "en": "EN",
+    "toggleAria": "Toggle language",
+    "toggleTitle": "Toggle language"
   },
   "login": {
     "title": "Welcome back",
@@ -76,7 +108,7 @@
     "char_name": "Character name",
     "char_namePlaceholder": "Your character name",
     "password": "Password",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "********",
     "forgotPassword": "Forgot password?",
     "submit": "Sign in",
     "noAccount": "Don't have an account?",

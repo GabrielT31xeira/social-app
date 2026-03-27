@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { applyTheme, getStoredTheme, setStoredTheme } from "~/shared/preferences";
 
 export function ThemeSwitcher() {
+  const { t } = useTranslation();
   const [mounted, setMounted] = useState(false);
   const [isDark, setIsDark] = useState(true);
 
@@ -24,9 +26,9 @@ export function ThemeSwitcher() {
       <button
         disabled
         className="cursor-not-allowed rounded bg-gray-800 px-3 py-2 text-white opacity-50"
-        aria-label="Toggle theme"
+        aria-label={t("theme.toggleAria")}
       >
-        Theme
+        {t("theme.loading")}
       </button>
     );
   }
@@ -35,10 +37,10 @@ export function ThemeSwitcher() {
     <button
       onClick={toggle}
       className="rounded bg-gray-800 px-3 py-2 text-white transition-colors duration-200 hover:bg-gray-700 dark:bg-gray-200 dark:text-gray-900 dark:hover:bg-gray-100"
-      aria-label="Toggle theme"
-      title="Toggle theme"
+      aria-label={t("theme.toggleAria")}
+      title={t("theme.toggleTitle")}
     >
-      {isDark ? "Light" : "Dark"}
+      {isDark ? t("theme.light") : t("theme.dark")}
     </button>
   );
 }

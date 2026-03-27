@@ -3,12 +3,11 @@ import { WelcomePage } from "~/pages/welcome/WelcomePage";
 
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
-    { name: "description", content: "WelcomePage to React Router!" },
+    { title: "Social App" },
+    { name: "description", content: "Social App welcome page" },
   ];
 }
 
 export default function Home() {
   return <WelcomePage />;
 }
-

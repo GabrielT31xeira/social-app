@@ -11,7 +11,7 @@ export function InfoPage() {
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gray-600 dark:text-gray-300">
             {t("info.contact")}
           </h2>
-          <div className="rounded bg-gray-50 p-3 transition-all duration-300 hover:translate-x-1 hover:bg-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500">
+          <div className="rounded bg-gray-50 p-3 transition-all duration-300 hover:translate-x-1 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700">
             <span className="block text-sm font-semibold text-indigo-600 dark:text-indigo-400">
               {t("info.email")}
             </span>
@@ -33,8 +33,8 @@ export function InfoPage() {
               href="https://github.com/GabrielT31xeira"
               target="_blank"
               rel="noreferrer"
-              aria-label="GitHub"
-              className="group flex items-center gap-3 rounded border-2 border-gray-200 bg-white p-4 transition-all duration-300 hover:translate-x-1 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-500 dark:bg-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-700"
+              aria-label={t("info.githubAria")}
+              className="group flex items-center gap-3 rounded border-2 border-gray-200 bg-white p-4 transition-all duration-300 hover:translate-x-1 hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-gray-500 dark:hover:bg-gray-700"
             >
               <svg
                 width="24"
@@ -54,8 +54,8 @@ export function InfoPage() {
               href="https://www.linkedin.com/in/gabriel-teixeira-de-carvalho-123456789/"
               target="_blank"
               rel="noreferrer"
-              aria-label="LinkedIn"
-              className="group flex items-center gap-3 rounded border-2 border-gray-200 bg-white p-4 transition-all duration-300 hover:translate-x-1 hover:border-blue-400 hover:bg-blue-50 dark:border-gray-500 dark:bg-gray-600 dark:hover:border-blue-400 dark:hover:bg-slate-700"
+              aria-label={t("info.linkedinAria")}
+              className="group flex items-center gap-3 rounded border-2 border-gray-200 bg-white p-4 transition-all duration-300 hover:translate-x-1 hover:border-blue-400 hover:bg-blue-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:border-blue-400 dark:hover:bg-slate-700"
             >
               <svg
                 width="24"

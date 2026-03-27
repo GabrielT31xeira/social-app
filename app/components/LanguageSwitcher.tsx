@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { getStoredLanguage, setStoredLanguage } from "~/shared/preferences";
 
 export function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -15,9 +15,9 @@ export function LanguageSwitcher() {
       <button
         disabled
         className="rounded bg-indigo-600 px-4 py-2 font-medium text-white opacity-70"
-        aria-label="Toggle language"
+        aria-label={t("language.toggleAria")}
       >
-        LANG
+        {t("language.loading")}
       </button>
     );
   }
@@ -34,9 +34,10 @@ export function LanguageSwitcher() {
     <button
       onClick={toggleLanguage}
       className="rounded bg-indigo-600 px-4 py-2 font-medium text-white transition-colors duration-300 hover:bg-indigo-700"
-      aria-label="Toggle language"
+      aria-label={t("language.toggleAria")}
+      title={t("language.toggleTitle")}
     >
-      {getStoredLanguage() === "pt-BR" ? "PT" : "EN"}
+      {getStoredLanguage() === "pt-BR" ? t("language.pt") : t("language.en")}
     </button>
   );
 }

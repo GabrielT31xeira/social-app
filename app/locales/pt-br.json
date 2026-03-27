@@ -4,82 +4,114 @@
     "name": "Gabriel Teixeira de Carvalho",
     "contact": "Contato",
     "email": "Email:",
+    "githubAria": "Perfil do GitHub",
+    "linkedinAria": "Perfil do LinkedIn",
     "socialLinks": "Redes Sociais",
     "notice": {
       "title": "Sobre este projeto",
-      "description": "Este projeto utiliza a API pública jsonplaceholder.typicode para demonstrar requisições HTTP e integração de dados em React. Foi desenvolvido com fins educacionais para aprender React e suas aplicações práticas.",
+      "description": "Este projeto utiliza a API publica jsonplaceholder.typicode para demonstrar requisicoes HTTP e integracao de dados em React. Foi desenvolvido com fins educacionais para aprender React e suas aplicacoes praticas.",
       "linkText": "JSONPlaceholder"
     }
   },
   "welcome": {
     "title": "Bem-vindo",
     "subtitle": "Explore um projeto moderno com React, Tailwind CSS e mais",
+    "home": "Home",
     "features": {
       "title": "Funcionalidades",
-      "item1": "Autenticação multi-idioma (PT-BR e Inglês)",
-      "item2": "Tema escuro e claro personalizável",
+      "item1": "Autenticacao multi-idioma (PT-BR e Ingles)",
+      "item2": "Tema escuro e claro personalizavel",
       "item3": "Design responsivo com Tailwind CSS",
-      "item4": "Integração com APIs externas"
+      "item4": "Integracao com APIs externas"
     },
     "integration": {
-      "title": "Integração com JSONPlaceholder",
-      "description": "Este projeto integra a API pública JSONPlaceholder, permitindo praticar requisições HTTP, gerenciamento de dados e consumo de APIs em uma aplicação React real.",
+      "title": "Integracao com JSONPlaceholder",
+      "description": "Este projeto integra a API publica JSONPlaceholder, permitindo praticar requisicoes HTTP, gerenciamento de dados e consumo de APIs em uma aplicacao React real.",
       "link": "Conhecer JSONPlaceholder"
     },
     "cta": "Visualizar Perfil"
   },
   "register": {
     "title": "Criar conta",
-    "subtitle": "Cadastre-se para começar",
+    "subtitle": "Cadastre-se para comecar",
     "name": "Nome completo",
     "namePlaceholder": "Seu nome",
     "char_name": "Nickname",
     "email": "E-mail",
     "emailPlaceholder": "seu@email.com",
     "password": "Senha",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "********",
     "confirmPassword": "Confirmar senha",
-    "confirmPlaceholder": "••••••••",
+    "confirmPlaceholder": "********",
     "submit": "Cadastrar",
-    "haveAccount": "Já tem uma conta?",
+    "haveAccount": "Ja tem uma conta?",
     "signIn": "Entrar",
     "success": "Cadastro realizado com sucesso! Redirecionando...",
-    "passwordMismatch": "As senhas não coincidem.",
+    "passwordMismatch": "As senhas nao coincidem.",
     "errorGeneric": "Erro ao cadastrar. Tente novamente.",
     "errorUnexpected": "Ocorreu um erro inesperado."
   },
   "home": {
+    "guest": "Visitante",
+    "logout": "Sair",
+    "createPost": "+ Criar Post",
+    "footer": "(c) {{year}} {{name}} Blog",
     "post": {
-        "create": "novo post"
+      "create": "novo post"
     }
-  }, 
+  },
   "post": {
     "create": {
       "main": "Novo post",
-      "description": "Descrição",
-      "title": "Título",
-      "content": "Conteúdo",
+      "description": "Descricao",
+      "title": "Titulo",
+      "content": "Conteudo",
       "cancel": "Cancelar",
       "submit": "Enviar",
-      "sucess": "Publicação enviada!"
+      "sucess": "Publicacao enviada!"
     },
     "error": {
-      "create": "Erro ao criar o post tente novamente mais tarde!"
+      "create": "Erro ao criar o post. Tente novamente mais tarde."
+    },
+    "feed": {
+      "loadErrorToast": "Falha ao carregar posts",
+      "loadErrorTitle": "Erro ao carregar posts",
+      "emptyTitle": "Nenhum post disponivel",
+      "emptyDescription": "Nao ha posts para exibir no momento.",
+      "badge": "Post",
+      "pagination": "Pagina {{currentPage}} de {{lastPage}} Total: {{total}} posts"
     }
   },
   "common": {
-    "loading": "Carregando..."
+    "loading": "Carregando...",
+    "retry": "Tentar novamente",
+    "previous": "Anterior",
+    "next": "Proximo"
+  },
+  "theme": {
+    "loading": "Tema",
+    "light": "Claro",
+    "dark": "Escuro",
+    "toggleAria": "Alternar tema",
+    "toggleTitle": "Alternar tema"
+  },
+  "language": {
+    "loading": "Idioma",
+    "pt": "PT",
+    "en": "EN",
+    "toggleAria": "Alternar idioma",
+    "toggleTitle": "Alternar idioma"
   },
   "login": {
     "title": "Bem-vindo de volta",
-    "subtitle": "Faça login na sua conta",
+    "subtitle": "Faca login na sua conta",
     "char_name": "Nome do personagem",
     "char_namePlaceholder": "Seu nome de personagem",
     "password": "Senha",
-    "passwordPlaceholder": "••••••••",
+    "passwordPlaceholder": "********",
     "forgotPassword": "Esqueceu a senha?",
     "submit": "Entrar",
-    "noAccount": "Não tem uma conta?",
+    "noAccount": "Nao tem uma conta?",
     "signUp": "Cadastre-se",
     "fieldsRequired": "Preencha todos os campos",
     "success": "Login realizado com sucesso! Redirecionando...",
