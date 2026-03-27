@@ -1,25 +1,21 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
-import ptBR from '../locales/pt-br.json';
-import en from '../locales/en.json';
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import en from "../locales/en.json";
+import ptBR from "../locales/pt-br.json";
+import { DEFAULT_LANGUAGE, getStoredLanguage } from "~/shared/preferences";
 
 const resources = {
-  'pt-BR': { translation: ptBR },
+  "pt-BR": { translation: ptBR },
   en: { translation: en },
 };
 
-// Pega o idioma salvo apenas no navegador
-const savedLanguage = typeof window !== 'undefined' ? localStorage.getItem('language') : null;
-
-i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: savedLanguage || 'pt-BR',
-    fallbackLng: 'pt-BR',
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+i18n.use(initReactI18next).init({
+  resources,
+  lng: getStoredLanguage(),
+  fallbackLng: DEFAULT_LANGUAGE,
+  interpolation: {
+    escapeValue: false,
+  },
+});
 
 export default i18n;

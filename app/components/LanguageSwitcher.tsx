@@ -1,5 +1,6 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { getStoredLanguage, setStoredLanguage } from "~/shared/preferences";
 
 export function LanguageSwitcher() {
   const { i18n } = useTranslation();
@@ -9,35 +10,33 @@ export function LanguageSwitcher() {
     setMounted(true);
   }, []);
 
-  // Render placeholder on server to avoid hydration mismatch
   if (!mounted) {
     return (
       <button
         disabled
-        className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white font-medium rounded transition-colors duration-300"
+        className="rounded bg-indigo-600 px-4 py-2 font-medium text-white opacity-70"
         aria-label="Toggle language"
       >
-        <span className="text-sm font-semibold">🌐</span>
+        LANG
       </button>
     );
   }
 
+  const currentLanguage = i18n.language === "pt-BR" ? "pt-BR" : "en";
+
   const toggleLanguage = () => {
-    const newLanguage = i18n.language === 'pt-BR' ? 'en' : 'pt-BR';
-    i18n.changeLanguage(newLanguage);
-    
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('language', newLanguage);
-    }
+    const nextLanguage = currentLanguage === "pt-BR" ? "en" : "pt-BR";
+    void i18n.changeLanguage(nextLanguage);
+    setStoredLanguage(nextLanguage);
   };
 
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center gap-2 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded transition-colors duration-300"
+      className="rounded bg-indigo-600 px-4 py-2 font-medium text-white transition-colors duration-300 hover:bg-indigo-700"
       aria-label="Toggle language"
     >
-      <span className="text-sm font-semibold">{i18n.language === 'pt-BR' ? '🇧🇷 PT' : '🇺🇸 EN'}</span>
+      {getStoredLanguage() === "pt-BR" ? "PT" : "EN"}
     </button>
   );
 }
