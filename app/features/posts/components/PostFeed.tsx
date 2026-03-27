@@ -1,6 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
 import { usePosts } from "~/features/posts/hooks/usePosts";
 
 interface PostFeedProps {
@@ -10,12 +11,24 @@ interface PostFeedProps {
 export function PostFeed({ maxPosts }: PostFeedProps) {
   const { t } = useTranslation();
   const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts });
+  const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   useEffect(() => {
     if (error) {
       toast.error(t("post.feed.loadErrorToast"));
     }
   }, [error, t]);
+
+  const handleOpenDetailsModal = (postId: string) => {
+    setSelectedPostId(postId);
+    setIsDetailsModalOpen(true);
+  };
+
+  const handleCloseDetailsModal = () => {
+    setIsDetailsModalOpen(false);
+    setSelectedPostId(null);
+  };
 
   if (loading) {
     return (
@@ -68,7 +81,8 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
         {posts.map((post) => (
           <article
             key={post.id}
-            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-300 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+            className="cursor-pointer overflow-hidden rounded-xl border border-gray-200 bg-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl dark:border-gray-700 dark:bg-gray-800"
+            onClick={() => handleOpenDetailsModal(post.id)}
           >
             <div className="p-6">
               <div className="mb-5 flex justify-between">
@@ -78,17 +92,38 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
                   </span>
                   <span className="text-sm text-gray-500">{post.userName}</span>
                 </div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {t("post.feed.commentsCount", { count: post.commentsCount })}
+                </span>
               </div>
 
               <h3 className="mb-4 text-xl font-bold text-gray-800 dark:text-white">
                 {post.title}
               </h3>
 
-              <p className="text-gray-600 dark:text-gray-300">{post.body}</p>
+              <p className="mb-6 text-gray-600 dark:text-gray-300">{post.body}</p>
+
+              <div className="flex justify-end">
+                <button
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    handleOpenDetailsModal(post.id);
+                  }}
+                  className="rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                >
+                  {t("post.feed.openDetails")}
+                </button>
+              </div>
             </div>
           </article>
         ))}
       </div>
+
+      <PostDetailsModal
+        isOpen={isDetailsModalOpen}
+        postId={selectedPostId}
+        onClose={handleCloseDetailsModal}
+      />
 
       {meta && (
         <div className="mt-12">

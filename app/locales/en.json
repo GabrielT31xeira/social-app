@@ -70,6 +70,16 @@
       "submit": "Submit",
       "sucess": "New post created!"
     },
+    "comments": {
+      "add": "Add comment",
+      "title": "New comment",
+      "description": "Write a comment for this post.",
+      "fieldLabel": "Comment",
+      "placeholder": "This is a test comment.",
+      "submit": "Send comment",
+      "success": "Comment sent successfully!",
+      "error": "Error adding comment. Please try again."
+    },
     "error": {
       "create": "Error creating the post, please try again later!"
     },
@@ -79,7 +89,19 @@
       "emptyTitle": "No posts available",
       "emptyDescription": "There are no posts to display right now.",
       "badge": "Post",
-      "pagination": "Page {{currentPage}} of {{lastPage}} Total: {{total}} posts"
+      "commentsCount": "{{count}} comments",
+      "pagination": "Page {{currentPage}} of {{lastPage}} Total: {{total}} posts",
+      "openDetails": "View details"
+    },
+    "details": {
+      "title": "Post details",
+      "subtitle": "See the full content and comments for this post.",
+      "loadErrorToast": "Failed to load post details",
+      "loadErrorTitle": "Error loading post details",
+      "commentsTitle": "Comments",
+      "commentsCount": "{{total}} comments",
+      "emptyComments": "There are no comments on this post yet.",
+      "pagination": "Page {{currentPage}} of {{lastPage}}"
     }
   },
   "common": {

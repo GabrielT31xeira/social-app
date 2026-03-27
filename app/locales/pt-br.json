@@ -70,6 +70,16 @@
       "submit": "Enviar",
       "sucess": "Publicacao enviada!"
     },
+    "comments": {
+      "add": "Adicionar comentario",
+      "title": "Novo comentario",
+      "description": "Escreva um comentario para este post.",
+      "fieldLabel": "Comentario",
+      "placeholder": "Esse e um comentario de teste.",
+      "submit": "Enviar comentario",
+      "success": "Comentario enviado com sucesso!",
+      "error": "Erro ao adicionar comentario. Tente novamente."
+    },
     "error": {
       "create": "Erro ao criar o post. Tente novamente mais tarde."
     },
@@ -79,7 +89,19 @@
       "emptyTitle": "Nenhum post disponivel",
       "emptyDescription": "Nao ha posts para exibir no momento.",
       "badge": "Post",
-      "pagination": "Pagina {{currentPage}} de {{lastPage}} Total: {{total}} posts"
+      "commentsCount": "{{count}} comentarios",
+      "pagination": "Pagina {{currentPage}} de {{lastPage}} Total: {{total}} posts",
+      "openDetails": "Ver detalhes"
+    },
+    "details": {
+      "title": "Detalhes do post",
+      "subtitle": "Veja o conteudo completo e os comentarios deste post.",
+      "loadErrorToast": "Falha ao carregar detalhes do post",
+      "loadErrorTitle": "Erro ao carregar detalhes do post",
+      "commentsTitle": "Comentarios",
+      "commentsCount": "{{total}} comentarios",
+      "emptyComments": "Nenhum comentario neste post ainda.",
+      "pagination": "Pagina {{currentPage}} de {{lastPage}}"
     }
   },
   "common": {
