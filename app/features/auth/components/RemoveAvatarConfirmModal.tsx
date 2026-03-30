@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { getReadableError } from "~/features/auth/auth-errors";
 import authService from "~/features/auth/auth-service";
 import { Icon } from "~/shared/components/Icons";
 
@@ -32,8 +33,8 @@ export function RemoveAvatarConfirmModal({
       }
 
       toast.error(result.message || t("profile.avatar.removeError"));
-    } catch (error: any) {
-      toast.error(error.message || t("profile.avatar.removeError"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("profile.avatar.removeError")));
     } finally {
       setLoading(false);
     }

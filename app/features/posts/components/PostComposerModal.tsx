@@ -1,7 +1,7 @@
 import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { getFirstApiError } from "~/features/auth/auth-errors";
+import { getFirstApiError, getReadableError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { CreatePostPayload, PostModalProps } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
@@ -38,8 +38,8 @@ export function PostComposerModal({ isOpen, onClose, onCreated }: PostModalProps
       }
 
       toast.error(getFirstApiError(result, t("post.error.create")));
-    } catch (error: any) {
-      toast.error(error.message || t("post.error.create"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("post.error.create")));
     } finally {
       setLoading(false);
     }

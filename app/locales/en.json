@@ -57,6 +57,7 @@
     "guest": "Guest",
     "logout": "Logout",
     "createPost": "+ Create Post",
+    "reloadPosts": "Reload posts",
     "footer": "(c) {{year}} {{name}} Blog",
     "post": {
       "create": "new post"
@@ -90,6 +91,15 @@
       "email": "Email",
       "createdAt": "Created at"
     }
+  },
+  "userPosts": {
+    "back": "Back to home",
+    "title": "Posts by {{name}}",
+    "subtitle": "See all publications from this user.",
+    "loadErrorToast": "Failed to load user posts",
+    "loadErrorTitle": "Error loading user posts",
+    "emptyTitle": "No posts found",
+    "emptyDescription": "This user has not published posts yet."
   },
   "post": {
     "create": {

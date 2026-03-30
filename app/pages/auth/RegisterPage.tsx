@@ -2,7 +2,7 @@ import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getAllApiErrors } from "~/features/auth/auth-errors";
+import { getAllApiErrors, getReadableError } from "~/features/auth/auth-errors";
 import { AuthInput } from "~/features/auth/components/AuthInput";
 import { AuthPageShell } from "~/features/auth/components/AuthPageShell";
 import authService from "~/features/auth/auth-service";
@@ -60,8 +60,8 @@ export function RegisterPage() {
           t("register.errorGeneric")
         ),
       );
-    } catch (error: any) {
-      toast.error(error.message || t("register.errorUnexpected"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("register.errorUnexpected")));
     } finally {
       setLoading(false);
     }

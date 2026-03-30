@@ -16,3 +16,10 @@ export function getAllApiErrors(error: ApiError) {
   return error.message ? [error.message] : [];
 }
 
+export function getReadableError(error: unknown, fallback: string) {
+  if (!error || typeof error !== "object") {
+    return fallback;
+  }
+
+  return getFirstApiError(error as ApiError, fallback);
+}

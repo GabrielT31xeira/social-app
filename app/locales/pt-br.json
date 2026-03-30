@@ -49,7 +49,7 @@
     "haveAccount": "Ja tem uma conta?",
     "signIn": "Entrar",
     "success": "Cadastro realizado com sucesso! Redirecionando...",
-    "passwordMismatch": "As senhas nao coincidem.",
+    "passwordMismatch": "As senhas não coincidem.",
     "errorGeneric": "Erro ao cadastrar. Tente novamente.",
     "errorUnexpected": "Ocorreu um erro inesperado."
   },
@@ -57,6 +57,7 @@
     "guest": "Visitante",
     "logout": "Sair",
     "createPost": "Criar Post",
+    "reloadPosts": "Atualizar posts",
     "footer": "(c) {{year}} {{name}} Blog",
     "post": {
       "create": "novo post"
@@ -90,6 +91,15 @@
       "email": "E-mail",
       "createdAt": "Criado em"
     }
+  },
+  "userPosts": {
+    "back": "Voltar para home",
+    "title": "Posts de {{name}}",
+    "subtitle": "Veja todas as publicações deste usuário.",
+    "loadErrorToast": "Falha ao carregar posts do usuário",
+    "loadErrorTitle": "Erro ao carregar posts do usuário",
+    "emptyTitle": "Nenhum post encontrado",
+    "emptyDescription": "Esse usuário ainda não publicou posts."
   },
   "post": {
     "create": {

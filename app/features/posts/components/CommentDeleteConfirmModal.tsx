@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { getFirstApiError } from "~/features/auth/auth-errors";
+import { getFirstApiError, getReadableError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import { Icon } from "~/shared/components/Icons";
 
@@ -39,8 +39,8 @@ export function CommentDeleteConfirmModal({
       }
 
       toast.error(getFirstApiError(result, t("post.comments.delete.error")));
-    } catch (error: any) {
-      toast.error(error.message || t("post.comments.delete.error"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("post.comments.delete.error")));
     } finally {
       setLoading(false);
     }

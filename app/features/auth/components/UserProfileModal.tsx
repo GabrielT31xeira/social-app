@@ -2,6 +2,7 @@ import { type ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { getReadableError } from "~/features/auth/auth-errors";
 import { resolveAvatarUrl } from "~/features/auth/avatar-url";
 import { RemoveAvatarConfirmModal } from "~/features/auth/components/RemoveAvatarConfirmModal";
 import authService from "~/features/auth/auth-service";
@@ -64,8 +65,8 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
       await authService.logout();
       onClose();
       navigate("/home");
-    } catch (err: any) {
-      toast.error(err.message || t("profile.logoutError"));
+    } catch (err: unknown) {
+      toast.error(getReadableError(err, t("profile.logoutError")));
     }
   };
 
@@ -80,8 +81,8 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
 
       try {
         await reloadProfile();
-      } catch (err: any) {
-        const message = err.message || t("profile.loadError");
+      } catch (err: unknown) {
+        const message = getReadableError(err, t("profile.loadError"));
         setError(message);
         toast.error(message);
       } finally {
@@ -111,8 +112,8 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
 
       await reloadProfile();
       toast.success(result.message || t("profile.avatar.uploadSuccess"));
-    } catch (err: any) {
-      toast.error(err.message || t("profile.avatar.uploadError"));
+    } catch (err: unknown) {
+      toast.error(getReadableError(err, t("profile.avatar.uploadError")));
     } finally {
       event.target.value = "";
       setUploadingAvatar(false);

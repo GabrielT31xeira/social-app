@@ -72,6 +72,7 @@ export interface PostsMeta {
   current_page: number;
   last_page: number;
   total: number;
+  per_page?: number;
 }
 
 export interface PostsLinks {
@@ -81,6 +82,18 @@ export interface PostsLinks {
 
 export interface PostsResponse {
   posts: Post[];
+  meta: PostsMeta | null;
+  links: PostsLinks | null;
+}
+
+export interface UserPostsResponse {
+  posts: Array<{
+    id: string;
+    title: string;
+    content: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
   meta: PostsMeta | null;
   links: PostsLinks | null;
 }

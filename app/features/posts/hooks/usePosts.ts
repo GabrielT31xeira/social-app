@@ -4,9 +4,10 @@ import type { Post, PostsLinks, PostsMeta } from "~/features/posts/types";
 
 interface UsePostsOptions {
   maxPosts?: number;
+  reloadKey?: number;
 }
 
-export function usePosts({ maxPosts }: UsePostsOptions = {}) {
+export function usePosts({ maxPosts, reloadKey = 0 }: UsePostsOptions = {}) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<PostsMeta | null>(null);
   const [links, setLinks] = useState<PostsLinks | null>(null);
@@ -31,7 +32,7 @@ export function usePosts({ maxPosts }: UsePostsOptions = {}) {
 
   useEffect(() => {
     loadPosts();
-  }, [loadPosts]);
+  }, [loadPosts, reloadKey]);
 
   return {
     posts,
@@ -42,4 +43,3 @@ export function usePosts({ maxPosts }: UsePostsOptions = {}) {
     reloadPosts: loadPosts,
   };
 }
-

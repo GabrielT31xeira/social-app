@@ -2,7 +2,7 @@ import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getFirstApiError } from "~/features/auth/auth-errors";
+import { getFirstApiError, getReadableError } from "~/features/auth/auth-errors";
 import { AuthInput } from "~/features/auth/components/AuthInput";
 import { AuthPageShell } from "~/features/auth/components/AuthPageShell";
 import authService from "~/features/auth/auth-service";
@@ -37,8 +37,8 @@ export function LoginPage() {
       }
 
       toast.error(getFirstApiError(result, t("login.errorGeneric")));
-    } catch (error: any) {
-      toast.error(error.message || t("login.errorUnexpected"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("login.errorUnexpected")));
     } finally {
       setLoading(false);
     }

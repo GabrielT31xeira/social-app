@@ -6,6 +6,7 @@ import type {
   CreatePostPayload,
   PostDetailsResponse,
   PostsResponse,
+  UserPostsResponse,
 } from "~/features/posts/types";
 
 export const postService = {
@@ -57,6 +58,34 @@ export const postService = {
         success: false,
         message: "Erro ao adicionar comentario!",
       };
+    }
+  },
+
+  async getUserPosts(userId: string, url?: string): Promise<UserPostsResponse> {
+    try {
+      const response = await apiClient.get(
+        url?.startsWith("http") ? url : `users/${userId}/posts`,
+      );
+      const apiResponse = response.data;
+
+      return {
+        posts: apiResponse.data.map((post: any) => ({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          createdAt: post.created_at,
+          updatedAt: post.updated_at,
+        })),
+        meta: apiResponse.meta ?? null,
+        links: apiResponse.links ?? null,
+      };
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Erro desconhecido ao buscar posts do usuário";
+
+      throw new Error(`Falha ao carregar posts do usuário: ${errorMessage}`);
     }
   },
 

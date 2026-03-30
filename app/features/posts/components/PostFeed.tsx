@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router";
 import { toast } from "react-toastify";
 import authService from "~/features/auth/auth-service";
 import { PostDeleteConfirmModal } from "~/features/posts/components/PostDeleteConfirmModal";
@@ -9,11 +10,12 @@ import { Icon } from "~/shared/components/Icons";
 
 interface PostFeedProps {
   maxPosts?: number;
+  reloadKey?: number;
 }
 
-export function PostFeed({ maxPosts }: PostFeedProps) {
+export function PostFeed({ maxPosts, reloadKey = 0 }: PostFeedProps) {
   const { t } = useTranslation();
-  const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts });
+  const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts, reloadKey });
   const user = authService.getUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [postPendingDelete, setPostPendingDelete] = useState<{ id: string; title: string } | null>(
@@ -112,7 +114,14 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
                   <span className="rounded-full bg-indigo-50 px-3 py-1 text-sm text-indigo-700">
                     {t("post.feed.badge")}
                   </span>
-                  <span className="text-sm text-gray-500">{post.userName}</span>
+                  <Link
+                    to={`/users/${post.userId}/posts`}
+                    state={{ userName: post.userName }}
+                    onClick={(event) => event.stopPropagation()}
+                    className="text-sm text-gray-500 transition-colors hover:text-indigo-600 hover:underline dark:hover:text-indigo-300"
+                  >
+                    {post.userName}
+                  </Link>
                 </div>
                 <span className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
                   <Icon name="messageCircle" className="h-4 w-4" />

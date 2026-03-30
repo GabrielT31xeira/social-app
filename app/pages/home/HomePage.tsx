@@ -24,9 +24,14 @@ export default function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [userData, setUserData] = useState(initialUser);
+  const [postsReloadKey, setPostsReloadKey] = useState(0);
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+
+  const refreshPosts = () => {
+    setPostsReloadKey((current) => current + 1);
+  };
 
   const openPostComposer = () => {
     if (userData) {
@@ -79,6 +84,13 @@ export default function HomePage() {
 
             <div className="flex items-center gap-4">
               <button
+                onClick={refreshPosts}
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-4 py-2.5 font-medium text-gray-700 shadow-sm transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900/30 dark:text-gray-200 dark:hover:bg-gray-900/60"
+              >
+                <Icon name="refreshCw" className="h-4 w-4" />
+                {t("home.reloadPosts")}
+              </button>
+              <button
                 onClick={openPostComposer}
                 className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-5 py-2.5 font-medium text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700 hover:shadow-lg"
               >
@@ -94,6 +106,7 @@ export default function HomePage() {
       <PostComposerModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        onCreated={refreshPosts}
       />
 
       <UserProfileModal
@@ -102,7 +115,7 @@ export default function HomePage() {
         onProfileUpdated={setUserData}
       />
 
-      <PostFeed maxPosts={15} />
+      <PostFeed maxPosts={15} reloadKey={postsReloadKey} />
 
       <footer className="mt-12 border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800">
         <div className="mx-auto max-w-2xl px-4 text-center">

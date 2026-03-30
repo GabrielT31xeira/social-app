@@ -18,6 +18,7 @@ type IconName =
   | "alertTriangle"
   | "chevronLeft"
   | "chevronRight"
+  | "refreshCw"
   | "sparkles"
   | "rocket"
   | "shield"
@@ -75,6 +76,8 @@ export function Icon({ name, className = "h-5 w-5", ...props }: IconProps) {
       return <svg {...common}><path d="m15 18-6-6 6-6" /></svg>;
     case "chevronRight":
       return <svg {...common}><path d="m9 18 6-6-6-6" /></svg>;
+    case "refreshCw":
+      return <svg {...common}><path d="M21 2v6h-6" /><path d="M3 12a9 9 0 0 1 15.5-6.36L21 8" /><path d="M3 22v-6h6" /><path d="M21 12a9 9 0 0 1-15.5 6.36L3 16" /></svg>;
     case "sparkles":
       return <svg {...common}><path d="m12 3 1.9 4.8L19 9.7l-4.1 2.7L16.8 17 12 14.3 7.2 17l1.9-4.6L5 9.7l5.1-1.9L12 3Z" /></svg>;
     case "rocket":

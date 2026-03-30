@@ -1,7 +1,7 @@
 import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { getFirstApiError } from "~/features/auth/auth-errors";
+import { getFirstApiError, getReadableError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { CommentModalProps, CreateCommentPayload } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
@@ -50,8 +50,8 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
       }
 
       toast.error(getFirstApiError(result, t("post.comments.error")));
-    } catch (error: any) {
-      toast.error(error.message || t("post.comments.error"));
+    } catch (error: unknown) {
+      toast.error(getReadableError(error, t("post.comments.error")));
     } finally {
       setLoading(false);
     }
