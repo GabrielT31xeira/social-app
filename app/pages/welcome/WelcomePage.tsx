@@ -2,12 +2,13 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { LanguageSwitcher } from "~/components/LanguageSwitcher";
 import { ThemeSwitcher } from "~/components/ThemeSwitcher";
+import { Icon } from "~/shared/components/Icons";
 
 export function WelcomePage() {
   const { t } = useTranslation();
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 dark:bg-slate-900">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 p-4 dark:from-slate-950 dark:via-slate-900 dark:to-slate-700">
       <div className="absolute top-6 right-6 flex items-center gap-3">
         <LanguageSwitcher />
         <ThemeSwitcher />
@@ -27,10 +28,10 @@ export function WelcomePage() {
               {t("welcome.features.title")}
             </h2>
             <ul className="space-y-2 text-sm text-gray-700 dark:text-gray-200">
-              <li>{t("welcome.features.item1")}</li>
-              <li>{t("welcome.features.item2")}</li>
-              <li>{t("welcome.features.item3")}</li>
-              <li>{t("welcome.features.item4")}</li>
+              <li className="flex items-center gap-2"><Icon name="languages" className="h-4 w-4 text-indigo-500" />{t("welcome.features.item1")}</li>
+              <li className="flex items-center gap-2"><Icon name="moon" className="h-4 w-4 text-indigo-500" />{t("welcome.features.item2")}</li>
+              <li className="flex items-center gap-2"><Icon name="shield" className="h-4 w-4 text-indigo-500" />{t("welcome.features.item3")}</li>
+              <li className="flex items-center gap-2"><Icon name="globe" className="h-4 w-4 text-indigo-500" />{t("welcome.features.item4")}</li>
             </ul>
           </div>
 
@@ -45,8 +46,9 @@ export function WelcomePage() {
               href="https://jsonplaceholder.typicode.com"
               target="_blank"
               rel="noreferrer"
-              className="mt-4 inline-block text-sm font-medium text-indigo-600 transition-colors hover:text-purple-600 hover:underline dark:text-indigo-400 dark:hover:text-purple-400"
+              className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-indigo-600 transition-colors hover:text-purple-600 hover:underline dark:text-indigo-400 dark:hover:text-purple-400"
             >
+              <Icon name="rocket" className="h-4 w-4" />
               {t("welcome.integration.link")}
             </a>
           </div>
@@ -55,14 +57,16 @@ export function WelcomePage() {
         <div className="grid grid-cols-1 gap-4 animate-slide-up justify-center md:grid-cols-2" style={{ animationDelay: "0.2s" }}>
           <Link
             to="/home"
-            className="rounded-lg bg-white px-8 py-3 font-bold text-indigo-600 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl dark:bg-gray-800 dark:text-indigo-400"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-3 font-bold text-indigo-600 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl dark:bg-gray-800 dark:text-indigo-400"
           >
+            <Icon name="sparkles" className="h-4 w-4" />
             {t("welcome.home")}
           </Link>
           <Link
             to="/info"
-            className="rounded-lg bg-white px-8 py-3 font-bold text-indigo-600 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl dark:bg-gray-800 dark:text-indigo-400"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-8 py-3 font-bold text-indigo-600 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl dark:bg-gray-800 dark:text-indigo-400"
           >
+            <Icon name="user" className="h-4 w-4" />
             {t("welcome.cta")}
           </Link>
         </div>

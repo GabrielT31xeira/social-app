@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import authService from "~/features/auth/auth-service";
+import { PostDeleteConfirmModal } from "~/features/posts/components/PostDeleteConfirmModal";
 import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
 import { usePosts } from "~/features/posts/hooks/usePosts";
+import { Icon } from "~/shared/components/Icons";
 
 interface PostFeedProps {
   maxPosts?: number;
@@ -11,7 +14,11 @@ interface PostFeedProps {
 export function PostFeed({ maxPosts }: PostFeedProps) {
   const { t } = useTranslation();
   const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts });
+  const user = authService.getUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
+  const [postPendingDelete, setPostPendingDelete] = useState<{ id: string; title: string } | null>(
+    null,
+  );
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -28,6 +35,14 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
   const handleCloseDetailsModal = () => {
     setIsDetailsModalOpen(false);
     setSelectedPostId(null);
+  };
+
+  const handleOpenDeleteModal = (postId: string, postTitle: string) => {
+    setPostPendingDelete({ id: postId, title: postTitle });
+  };
+
+  const handleCloseDeleteModal = () => {
+    setPostPendingDelete(null);
   };
 
   if (loading) {
@@ -55,8 +70,9 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
           <p className="mb-4 text-sm text-red-600">{error}</p>
           <button
             onClick={() => reloadPosts()}
-            className="rounded bg-red-100 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-red-200"
+            className="inline-flex items-center gap-2 rounded bg-red-100 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-red-200"
           >
+            <Icon name="alertTriangle" className="h-4 w-4" />
             {t("common.retry")}
           </button>
         </div>
@@ -92,7 +108,8 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
                   </span>
                   <span className="text-sm text-gray-500">{post.userName}</span>
                 </div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="inline-flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                  <Icon name="messageCircle" className="h-4 w-4" />
                   {t("post.feed.commentsCount", { count: post.commentsCount })}
                 </span>
               </div>
@@ -103,14 +120,27 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
 
               <p className="mb-6 text-gray-600 dark:text-gray-300">{post.body}</p>
 
-              <div className="flex justify-end">
+              <div className="flex justify-end gap-3">
+                {user?.id === post.userId && (
+                  <button
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleOpenDeleteModal(post.id, post.title);
+                    }}
+                    className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-300 dark:hover:bg-red-900/30"
+                  >
+                    <Icon name="trash" className="h-4 w-4" />
+                    {t("post.delete.trigger")}
+                  </button>
+                )}
                 <button
                   onClick={(event) => {
                     event.stopPropagation();
                     handleOpenDetailsModal(post.id);
                   }}
-                  className="rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                  className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
                 >
+                  <Icon name="eye" className="h-4 w-4" />
                   {t("post.feed.openDetails")}
                 </button>
               </div>
@@ -123,6 +153,14 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
         isOpen={isDetailsModalOpen}
         postId={selectedPostId}
         onClose={handleCloseDetailsModal}
+      />
+
+      <PostDeleteConfirmModal
+        isOpen={postPendingDelete !== null}
+        postId={postPendingDelete?.id ?? null}
+        postTitle={postPendingDelete?.title}
+        onClose={handleCloseDeleteModal}
+        onDeleted={() => void reloadPosts()}
       />
 
       {meta && (
@@ -140,8 +178,9 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
               <button
                 onClick={() => reloadPosts(links?.prev || undefined)}
                 disabled={!links?.prev}
-                className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               >
+                <Icon name="chevronLeft" className="h-4 w-4" />
                 {t("common.previous")}
               </button>
 
@@ -152,9 +191,10 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
               <button
                 onClick={() => reloadPosts(links?.next || undefined)}
                 disabled={!links?.next}
-                className="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
+                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
               >
                 {t("common.next")}
+                <Icon name="chevronRight" className="h-4 w-4" />
               </button>
             </div>
           </div>

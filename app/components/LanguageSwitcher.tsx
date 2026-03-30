@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Icon } from "~/shared/components/Icons";
 import { getStoredLanguage, setStoredLanguage } from "~/shared/preferences";
 
 export function LanguageSwitcher() {
@@ -14,9 +15,10 @@ export function LanguageSwitcher() {
     return (
       <button
         disabled
-        className="rounded bg-indigo-600 px-4 py-2 font-medium text-white opacity-70"
+        className="flex items-center gap-2 rounded bg-indigo-600 px-4 py-2 font-medium text-white opacity-70"
         aria-label={t("language.toggleAria")}
       >
+        <Icon name="languages" className="h-4 w-4" />
         {t("language.loading")}
       </button>
     );
@@ -33,10 +35,11 @@ export function LanguageSwitcher() {
   return (
     <button
       onClick={toggleLanguage}
-      className="rounded bg-indigo-600 px-4 py-2 font-medium text-white transition-colors duration-300 hover:bg-indigo-700"
+      className="flex items-center gap-2 rounded bg-indigo-600 px-4 py-2 font-medium text-white transition-colors duration-300 hover:bg-indigo-700"
       aria-label={t("language.toggleAria")}
       title={t("language.toggleTitle")}
     >
+      <Icon name="languages" className="h-4 w-4" />
       {getStoredLanguage() === "pt-BR" ? t("language.pt") : t("language.en")}
     </button>
   );

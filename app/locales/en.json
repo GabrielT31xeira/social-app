@@ -80,6 +80,17 @@
       "success": "Comment sent successfully!",
       "error": "Error adding comment. Please try again."
     },
+    "delete": {
+      "trigger": "Delete",
+      "title": "Delete post",
+      "description": "Are you sure you want to delete \"{{title}}\"?",
+      "warning": "This action cannot be undone.",
+      "confirm": "Yes, delete",
+      "cancel": "Cancel",
+      "close": "Close confirmation modal",
+      "success": "Post deleted successfully!",
+      "error": "Error deleting the post. Please try again."
+    },
     "error": {
       "create": "Error creating the post, please try again later!"
     },

@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from "react-router";
 import authService from "~/features/auth/auth-service";
 import { PostComposerModal } from "~/features/posts/components/PostComposerModal";
 import { PostFeed } from "~/features/posts/components/PostFeed";
+import { Icon } from "~/shared/components/Icons";
 import { PageControls } from "~/shared/components/PageControls";
 
 export default function HomePage() {
@@ -38,8 +39,9 @@ export default function HomePage() {
                     void authService.logout();
                     navigate("/home");
                   }}
-                  className="px-2 py-1 text-sm text-blue-600 hover:underline"
+                  className="inline-flex items-center gap-2 px-2 py-1 text-sm text-blue-600 hover:underline"
                 >
+                  <Icon name="logOut" className="h-4 w-4" />
                   {t("home.logout")}
                 </button>
               )}
@@ -48,8 +50,9 @@ export default function HomePage() {
             <div className="flex items-center gap-4">
               <button
                 onClick={openPostComposer}
-                className="rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-5 py-2.5 font-medium text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700 hover:shadow-lg"
+                className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-5 py-2.5 font-medium text-white shadow-md transition-all hover:from-green-600 hover:to-emerald-700 hover:shadow-lg"
               >
+                <Icon name="plusSquare" className="h-4 w-4" />
                 {t("home.createPost")}
               </button>
               <PageControls />

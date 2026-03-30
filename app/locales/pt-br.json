@@ -54,7 +54,7 @@
   "home": {
     "guest": "Visitante",
     "logout": "Sair",
-    "createPost": "+ Criar Post",
+    "createPost": "Criar Post",
     "footer": "(c) {{year}} {{name}} Blog",
     "post": {
       "create": "novo post"
@@ -79,6 +79,17 @@
       "submit": "Enviar comentario",
       "success": "Comentario enviado com sucesso!",
       "error": "Erro ao adicionar comentario. Tente novamente."
+    },
+    "delete": {
+      "trigger": "Apagar",
+      "title": "Apagar post",
+      "description": "Tem certeza que deseja apagar \"{{title}}\"?",
+      "warning": "Essa ação não pode ser desfeita.",
+      "confirm": "Sim, apagar",
+      "cancel": "Cancelar",
+      "close": "Fechar modal de confirmação",
+      "success": "Post apagado com sucesso!",
+      "error": "Erro ao apagar o post. Tente novamente."
     },
     "error": {
       "create": "Erro ao criar o post. Tente novamente mais tarde."

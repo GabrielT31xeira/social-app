@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { AuthPageShell } from "~/features/auth/components/AuthPageShell";
+import { Icon } from "~/shared/components/Icons";
 
 export function InfoPage() {
   const { t } = useTranslation();
@@ -13,7 +14,10 @@ export function InfoPage() {
           </h2>
           <div className="rounded bg-gray-50 p-3 transition-all duration-300 hover:translate-x-1 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700">
             <span className="block text-sm font-semibold text-indigo-600 dark:text-indigo-400">
-              {t("info.email")}
+              <span className="inline-flex items-center gap-2">
+                <Icon name="mail" className="h-4 w-4" />
+                {t("info.email")}
+              </span>
             </span>
             <a
               href="mailto:gt3ixeira@gmail.com"

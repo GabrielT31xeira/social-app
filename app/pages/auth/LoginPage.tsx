@@ -7,6 +7,7 @@ import { AuthInput } from "~/features/auth/components/AuthInput";
 import { AuthPageShell } from "~/features/auth/components/AuthPageShell";
 import authService from "~/features/auth/auth-service";
 import type { LoginPayload } from "~/features/auth/types";
+import { Icon } from "~/shared/components/Icons";
 
 export function LoginPage() {
   const { t } = useTranslation();
@@ -54,12 +55,7 @@ export function LoginPage() {
           onChange={handleChange}
           label={t("login.char_name")}
           placeholder={t("login.char_namePlaceholder")}
-          icon={
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          }
+          icon={<Icon name="user" className="h-5 w-5" />}
         />
 
         <AuthInput
@@ -70,12 +66,7 @@ export function LoginPage() {
           onChange={handleChange}
           label={t("login.password")}
           placeholder={t("login.passwordPlaceholder")}
-          icon={
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-          }
+          icon={<Icon name="lock" className="h-5 w-5" />}
         />
 
         <div className="text-right">
@@ -87,8 +78,9 @@ export function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 font-semibold text-white transition-all duration-300 hover:from-indigo-700 hover:to-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 px-4 py-3 font-semibold text-white transition-all duration-300 hover:from-indigo-700 hover:to-purple-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
+          <Icon name="logOut" className="h-4 w-4 rotate-180" />
           {loading ? t("common.loading") : t("login.submit")}
         </button>
       </form>

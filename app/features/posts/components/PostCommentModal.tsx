@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { getFirstApiError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { CommentModalProps, CreateCommentPayload } from "~/features/posts/types";
+import { Icon } from "~/shared/components/Icons";
 
 const emptyFormState = {
   description: "",
@@ -71,9 +72,9 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
               <h2 className="text-2xl font-bold">{t("post.comments.title")}</h2>
               <button
                 onClick={onClose}
-                className="text-2xl font-bold text-white/80 transition-colors hover:text-white"
+                className="text-white/80 transition-colors hover:text-white"
               >
-                &times;
+                <Icon name="x" className="h-6 w-6" />
               </button>
             </div>
             <p className="mt-2 opacity-90">{t("post.comments.description")}</p>
@@ -105,8 +106,9 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 font-semibold text-white transition-all hover:from-indigo-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-indigo-600 to-blue-600 px-4 py-3 font-semibold text-white transition-all hover:from-indigo-700 hover:to-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
+                <Icon name="send" className="h-4 w-4" />
                 {loading ? t("common.loading") : t("post.comments.submit")}
               </button>
             </div>

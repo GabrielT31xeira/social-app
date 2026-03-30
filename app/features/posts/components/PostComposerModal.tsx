@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { getFirstApiError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { CreatePostPayload, PostModalProps } from "~/features/posts/types";
+import { Icon } from "~/shared/components/Icons";
 
 const initialFormState: CreatePostPayload = {
   title: "",
@@ -59,9 +60,9 @@ export function PostComposerModal({ isOpen, onClose, onCreated }: PostModalProps
               <h2 className="text-2xl font-bold">{t("post.create.main")}</h2>
               <button
                 onClick={onClose}
-                className="text-2xl font-bold text-white/80 transition-colors hover:text-white"
+                className="text-white/80 transition-colors hover:text-white"
               >
-                &times;
+                <Icon name="x" className="h-6 w-6" />
               </button>
             </div>
             <p className="mt-2 opacity-90">{t("post.create.description")}</p>
@@ -105,8 +106,9 @@ export function PostComposerModal({ isOpen, onClose, onCreated }: PostModalProps
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-3 font-semibold text-white transition-all hover:from-green-600 hover:to-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-3 font-semibold text-white transition-all hover:from-green-600 hover:to-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
+                <Icon name="send" className="h-4 w-4" />
                 {loading ? t("common.loading") : t("post.create.submit")}
               </button>
             </div>

@@ -1,4 +1,5 @@
 import apiClient from "~/services/api/apiClient";
+import type { ApiResult } from "~/services/api/responses";
 import type {
   CommentsMeta,
   CreateCommentPayload,
@@ -55,6 +56,18 @@ export const postService = {
       return error.response?.data || {
         success: false,
         message: "Erro ao adicionar comentario!",
+      };
+    }
+  },
+
+  async deletePost(postId: string): Promise<ApiResult<null>> {
+    try {
+      const response = await apiClient.delete<ApiResult<null>>(`posts/${postId}/destroy`);
+      return response.data;
+    } catch (error: any) {
+      return error.response?.data || {
+        success: false,
+        message: "Erro ao apagar post!",
       };
     }
   },

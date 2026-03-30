@@ -5,6 +5,7 @@ import authService from "~/features/auth/auth-service";
 import { PostCommentModal } from "~/features/posts/components/PostCommentModal";
 import { postService } from "~/features/posts/post-service";
 import type { PostDetails, PostDetailsModalProps, PostComment, CommentsMeta } from "~/features/posts/types";
+import { Icon } from "~/shared/components/Icons";
 
 export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalProps) {
   const { t } = useTranslation();
@@ -57,9 +58,9 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
             <h2 className="text-2xl font-bold">{t("post.details.title")}</h2>
             <button
               onClick={onClose}
-              className="text-2xl font-bold text-white/80 transition-colors hover:text-white"
+              className="text-white/80 transition-colors hover:text-white"
             >
-              &times;
+              <Icon name="x" className="h-6 w-6" />
             </button>
           </div>
           <p className="mt-2 opacity-90">{t("post.details.subtitle")}</p>
@@ -80,8 +81,9 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
               <p className="mb-4 text-sm text-red-600">{error}</p>
               <button
                 onClick={() => void loadPostDetails()}
-                className="rounded bg-red-100 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-red-200"
+                className="inline-flex items-center gap-2 rounded bg-red-100 px-4 py-2 font-medium text-red-700 transition-colors hover:bg-red-200"
               >
+                <Icon name="alertTriangle" className="h-4 w-4" />
                 {t("common.retry")}
               </button>
             </div>
@@ -97,8 +99,9 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                   {user && (
                     <button
                       onClick={() => setIsCommentModalOpen(true)}
-                      className="rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                    className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
                     >
+                      <Icon name="messageCircle" className="h-4 w-4" />
                       {t("post.comments.add")}
                     </button>
                   )}
@@ -110,7 +113,8 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
 
               <section className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  <h4 className="inline-flex items-center gap-2 text-lg font-semibold text-gray-900 dark:text-white">
+                    <Icon name="messageCircle" className="h-5 w-5" />
                     {t("post.details.commentsTitle")}
                   </h4>
                   {commentsMeta && (
@@ -152,8 +156,9 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                     <button
                       onClick={() => void loadPostDetails(commentsMeta.prev_page_url || undefined)}
                       disabled={!commentsMeta.prev_page_url}
-                      className="rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                     >
+                      <Icon name="chevronLeft" className="h-4 w-4" />
                       {t("common.previous")}
                     </button>
 
@@ -167,9 +172,10 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                     <button
                       onClick={() => void loadPostDetails(commentsMeta.next_page_url || undefined)}
                       disabled={!commentsMeta.next_page_url}
-                      className="rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
+                      className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
                     >
                       {t("common.next")}
+                      <Icon name="chevronRight" className="h-4 w-4" />
                     </button>
                   </div>
                 )}
