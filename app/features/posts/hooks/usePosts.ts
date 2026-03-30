@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { postService } from "~/features/posts/post-service";
-import type { Post, PostsLinks, PostsMeta } from "~/features/posts/types";
+import type { Post, PostsLinks, PostsMeta, PostSort } from "~/features/posts/types";
 
 interface UsePostsOptions {
   maxPosts?: number;
   reloadKey?: number;
+  sort?: PostSort;
 }
 
-export function usePosts({ maxPosts, reloadKey = 0 }: UsePostsOptions = {}) {
+export function usePosts({ maxPosts, reloadKey = 0, sort = "recent" }: UsePostsOptions = {}) {
   const [posts, setPosts] = useState<Post[]>([]);
   const [meta, setMeta] = useState<PostsMeta | null>(null);
   const [links, setLinks] = useState<PostsLinks | null>(null);
@@ -19,7 +20,7 @@ export function usePosts({ maxPosts, reloadKey = 0 }: UsePostsOptions = {}) {
     setError(null);
 
     try {
-      const response = await postService.getPosts(url);
+      const response = await postService.getPosts(url, sort);
       setPosts(maxPosts ? response.posts.slice(0, maxPosts) : response.posts);
       setMeta(response.meta);
       setLinks(response.links);
@@ -28,11 +29,17 @@ export function usePosts({ maxPosts, reloadKey = 0 }: UsePostsOptions = {}) {
     } finally {
       setLoading(false);
     }
-  }, [maxPosts]);
+  }, [maxPosts, sort]);
 
   useEffect(() => {
     loadPosts();
   }, [loadPosts, reloadKey]);
+
+  const updatePost = useCallback((postId: string, updater: (post: Post) => Post) => {
+    setPosts((currentPosts) =>
+      currentPosts.map((post) => (post.id === postId ? updater(post) : post)),
+    );
+  }, []);
 
   return {
     posts,
@@ -41,5 +48,6 @@ export function usePosts({ maxPosts, reloadKey = 0 }: UsePostsOptions = {}) {
     loading,
     error,
     reloadPosts: loadPosts,
+    updatePost,
   };
 }

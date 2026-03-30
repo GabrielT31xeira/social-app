@@ -150,11 +150,20 @@
     "error": {
       "create": "Error creating the post, please try again later!"
     },
+    "reaction": {
+      "error": "Error updating the post reaction."
+    },
     "feed": {
       "loadErrorToast": "Failed to load posts",
       "loadErrorTitle": "Error loading posts",
       "emptyTitle": "No posts available",
       "emptyDescription": "There are no posts to display right now.",
+      "sortLabel": "Sort by",
+      "sort": {
+        "recent": "Most recent",
+        "bestRated": "Best rated",
+        "worstRated": "Worst rated"
+      },
       "badge": "Post",
       "commentsCount": "{{count}} comments",
       "pagination": "Page {{currentPage}} of {{lastPage}} Total: {{total}} posts",

@@ -65,6 +65,33 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
     setCommentPendingDelete(comment.id);
   };
 
+  const handleReaction = async (nextReaction: "like" | "dislike") => {
+    if (!user || !post) {
+      return;
+    }
+
+    const result =
+      post.myReaction === nextReaction
+        ? await postService.removeReaction(post.id)
+        : await postService.reactToPost(post.id, nextReaction);
+
+    if (!result.success) {
+      toast.error(result.message || t("post.reaction.error"));
+      return;
+    }
+
+    setPost((current) =>
+      current
+        ? {
+            ...current,
+            likesCount: Number(result.data?.likes_count ?? current.likesCount),
+            dislikesCount: Number(result.data?.dislikes_count ?? current.dislikesCount),
+            myReaction: result.data?.my_reaction ?? null,
+          }
+        : current,
+    );
+  };
+
   if (!isOpen || !postId) {
     return null;
   }
@@ -117,15 +144,43 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                   <span className="rounded-full bg-indigo-50 px-3 py-1 text-sm text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
                     {t("post.feed.badge")}
                   </span>
-                  {user && (
+                  <div className="flex flex-wrap items-center gap-2">
                     <button
-                      onClick={() => setIsCommentModalOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                      type="button"
+                      onClick={() => void handleReaction("like")}
+                      disabled={!user}
+                      className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        post.myReaction === "like"
+                          ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                          : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                      }`}
                     >
-                      <Icon name="messageCircle" className="h-4 w-4" />
-                      {t("post.comments.add")}
+                      <Icon name="thumbsUp" className="h-4 w-4" />
+                      {post.likesCount}
                     </button>
-                  )}
+                    <button
+                      type="button"
+                      onClick={() => void handleReaction("dislike")}
+                      disabled={!user}
+                      className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                        post.myReaction === "dislike"
+                          ? "border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-300"
+                          : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                      }`}
+                    >
+                      <Icon name="thumbsDown" className="h-4 w-4" />
+                      {post.dislikesCount}
+                    </button>
+                    {user && (
+                      <button
+                        onClick={() => setIsCommentModalOpen(true)}
+                        className="inline-flex items-center gap-2 rounded-lg border border-indigo-200 px-4 py-2 text-sm font-medium text-indigo-700 transition-colors hover:bg-indigo-50 dark:border-indigo-700 dark:text-indigo-300 dark:hover:bg-indigo-900/30"
+                      >
+                        <Icon name="messageCircle" className="h-4 w-4" />
+                        {t("post.comments.add")}
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{post.title}</h3>

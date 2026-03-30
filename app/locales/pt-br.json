@@ -150,11 +150,20 @@
     "error": {
       "create": "Erro ao criar o post. Tente novamente mais tarde."
     },
+    "reaction": {
+      "error": "Erro ao atualizar a reação do post."
+    },
     "feed": {
       "loadErrorToast": "Falha ao carregar posts",
       "loadErrorTitle": "Erro ao carregar posts",
       "emptyTitle": "Nenhum post disponivel",
       "emptyDescription": "Nao ha posts para exibir no momento.",
+      "sortLabel": "Ordenar por",
+      "sort": {
+        "recent": "Mais recentes",
+        "bestRated": "Melhor avaliados",
+        "worstRated": "Pior avaliados"
+      },
       "badge": "Post",
       "commentsCount": "{{count}} comentarios",
       "pagination": "Pagina {{currentPage}} de {{lastPage}} Total: {{total}} posts",

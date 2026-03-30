@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { type MouseEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
@@ -7,6 +7,8 @@ import type { User } from "~/features/auth/types";
 import { PostDeleteConfirmModal } from "~/features/posts/components/PostDeleteConfirmModal";
 import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
 import { usePosts } from "~/features/posts/hooks/usePosts";
+import { postService } from "~/features/posts/post-service";
+import type { PostSort } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
 
 interface PostFeedProps {
@@ -17,13 +19,48 @@ interface PostFeedProps {
 
 export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps) {
   const { t } = useTranslation();
-  const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts, reloadKey });
+  const [sort, setSort] = useState<PostSort>("recent");
+  const { posts, meta, links, loading, error, reloadPosts, updatePost } = usePosts({
+    maxPosts,
+    reloadKey,
+    sort,
+  });
   const user = currentUser ?? authService.getUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [postPendingDelete, setPostPendingDelete] = useState<{ id: string; title: string } | null>(
     null,
   );
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+
+  const handleReaction = async (
+    event: MouseEvent<HTMLButtonElement>,
+    postId: string,
+    currentReaction: "like" | "dislike" | null,
+    nextReaction: "like" | "dislike",
+  ) => {
+    event.stopPropagation();
+
+    if (!user) {
+      return;
+    }
+
+    const result =
+      currentReaction === nextReaction
+        ? await postService.removeReaction(postId)
+        : await postService.reactToPost(postId, nextReaction);
+
+    if (!result.success) {
+      toast.error(result.message || t("post.reaction.error"));
+      return;
+    }
+
+    updatePost(postId, (post) => ({
+      ...post,
+      likesCount: Number(result.data?.likes_count ?? post.likesCount),
+      dislikesCount: Number(result.data?.dislikes_count ?? post.dislikesCount),
+      myReaction: result.data?.my_reaction ?? null,
+    }));
+  };
 
   useEffect(() => {
     if (error) {
@@ -103,6 +140,26 @@ export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps
 
   return (
     <div className="mx-auto mt-8 max-w-2xl px-4">
+      <div className="mb-6 flex justify-end">
+        <label className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+          {t("post.feed.sortLabel")}
+          <span className="relative">
+            <select
+              value={sort}
+              onChange={(event) => setSort(event.target.value as PostSort)}
+              className="appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+            >
+              <option value="recent">{t("post.feed.sort.recent")}</option>
+              <option value="best_rated">{t("post.feed.sort.bestRated")}</option>
+              <option value="worst_rated">{t("post.feed.sort.worstRated")}</option>
+            </select>
+            <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500 dark:text-gray-400">
+              <Icon name="chevronDown" className="h-4 w-4" />
+            </span>
+          </span>
+        </label>
+      </div>
+
       <div className="space-y-8">
         {posts.map((post) => (
           <article
@@ -137,7 +194,35 @@ export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps
 
               <p className="mb-6 text-gray-600 dark:text-gray-300">{post.body}</p>
 
-              <div className="flex justify-end gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={(event) => void handleReaction(event, post.id, post.myReaction, "like")}
+                    className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                      post.myReaction === "like"
+                        ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                        : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                    }`}
+                  >
+                    <Icon name="thumbsUp" className="h-4 w-4" />
+                    {post.likesCount}
+                  </button>
+                  <button
+                    onClick={(event) =>
+                      void handleReaction(event, post.id, post.myReaction, "dislike")
+                    }
+                    className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm font-medium transition-colors ${
+                      post.myReaction === "dislike"
+                        ? "border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-300"
+                        : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                    }`}
+                  >
+                    <Icon name="thumbsDown" className="h-4 w-4" />
+                    {post.dislikesCount}
+                  </button>
+                </div>
+
+                <div className="flex justify-end gap-3">
                 {user && String(user.id) === String(post.userId) && (
                   <button
                     onClick={(event) => {
@@ -160,6 +245,7 @@ export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps
                   <Icon name="eye" className="h-4 w-4" />
                   {t("post.feed.openDetails")}
                 </button>
+                </div>
               </div>
             </div>
           </article>

@@ -19,6 +19,8 @@ type IconName =
   | "chevronLeft"
   | "chevronRight"
   | "refreshCw"
+  | "thumbsUp"
+  | "thumbsDown"
   | "sparkles"
   | "rocket"
   | "shield"
@@ -78,6 +80,10 @@ export function Icon({ name, className = "h-5 w-5", ...props }: IconProps) {
       return <svg {...common}><path d="m9 18 6-6-6-6" /></svg>;
     case "refreshCw":
       return <svg {...common}><path d="M21 2v6h-6" /><path d="M3 12a9 9 0 0 1 15.5-6.36L21 8" /><path d="M3 22v-6h6" /><path d="M21 12a9 9 0 0 1-15.5 6.36L3 16" /></svg>;
+    case "thumbsUp":
+      return <svg {...common}><path d="M7 10v12" /><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.97 2.36l-1.3 7A2 2 0 0 1 18.53 21H7a2 2 0 0 1-2-2V10.5A2.5 2.5 0 0 1 7.5 8H10l5-5a1.5 1.5 0 0 1 2.47 1.67L15 10" /></svg>;
+    case "thumbsDown":
+      return <svg {...common}><path d="M17 14V2" /><path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.97-2.36l1.3-7A2 2 0 0 1 5.47 3H17a2 2 0 0 1 2 2v8.5A2.5 2.5 0 0 1 16.5 16H14l-5 5a1.5 1.5 0 0 1-2.47-1.67L9 14" /></svg>;
     case "sparkles":
       return <svg {...common}><path d="m12 3 1.9 4.8L19 9.7l-4.1 2.7L16.8 17 12 14.3 7.2 17l1.9-4.6L5 9.7l5.1-1.9L12 3Z" /></svg>;
     case "rocket":

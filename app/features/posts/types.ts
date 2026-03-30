@@ -4,6 +4,8 @@ export interface PostModalProps {
   onCreated?: () => void;
 }
 
+export type PostSort = "recent" | "best_rated" | "worst_rated";
+
 export interface Post {
   id: string;
   title: string;
@@ -11,6 +13,9 @@ export interface Post {
   userId: string;
   userName: string;
   commentsCount: number;
+  likesCount: number;
+  dislikesCount: number;
+  myReaction: "like" | "dislike" | null;
 }
 
 export interface CreatePostPayload {
@@ -59,6 +64,9 @@ export interface PostDetails {
   title: string;
   contents: string[];
   userId: string;
+  likesCount: number;
+  dislikesCount: number;
+  myReaction: "like" | "dislike" | null;
 }
 
 export interface PostDetailsResponse {

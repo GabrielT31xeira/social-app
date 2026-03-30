@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router";
 import { toast } from "react-toastify";
 import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
 import { postService } from "~/features/posts/post-service";
-import type { PostsLinks, PostsMeta, UserPostsResponse } from "~/features/posts/types";
+import type { PostSort, PostsLinks, PostsMeta, UserPostsResponse } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
 
 interface UserPostsPageProps {
@@ -26,13 +26,14 @@ export function UserPostsPage({ userId }: UserPostsPageProps) {
   const [error, setError] = useState<string | null>(null);
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
+  const [sort, setSort] = useState<PostSort>("recent");
 
   const loadPosts = async (url?: string) => {
     setLoading(true);
     setError(null);
 
     try {
-      const response = await postService.getUserPosts(userId, url);
+      const response = await postService.getUserPosts(userId, url, sort);
       setPosts(response.posts);
       setMeta(response.meta);
       setLinks(response.links);
@@ -46,7 +47,7 @@ export function UserPostsPage({ userId }: UserPostsPageProps) {
 
   useEffect(() => {
     void loadPosts();
-  }, [userId]);
+  }, [sort, userId]);
 
   const openDetails = (postId: string) => {
     setSelectedPostId(postId);
@@ -72,6 +73,23 @@ export function UserPostsPage({ userId }: UserPostsPageProps) {
               {t("userPosts.subtitle")}
             </p>
           </div>
+          <label className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+            {t("post.feed.sortLabel")}
+            <span className="relative">
+              <select
+                value={sort}
+                onChange={(event) => setSort(event.target.value as PostSort)}
+                className="appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-12 text-sm text-gray-700 outline-none transition-colors focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+              >
+                <option value="recent">{t("post.feed.sort.recent")}</option>
+                <option value="best_rated">{t("post.feed.sort.bestRated")}</option>
+                <option value="worst_rated">{t("post.feed.sort.worstRated")}</option>
+              </select>
+              <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500 dark:text-gray-400">
+                <Icon name="chevronDown" className="h-4 w-4" />
+              </span>
+            </span>
+          </label>
         </div>
 
         {loading && (
