@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import authService from "~/features/auth/auth-service";
+import { CommentDeleteConfirmModal } from "~/features/posts/components/CommentDeleteConfirmModal";
 import { PostCommentModal } from "~/features/posts/components/PostCommentModal";
 import { postService } from "~/features/posts/post-service";
 import type { PostDetails, PostDetailsModalProps, PostComment, CommentsMeta } from "~/features/posts/types";
@@ -15,6 +16,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
+  const [commentPendingDelete, setCommentPendingDelete] = useState<string | null>(null);
   const user = authService.getUser();
 
   const loadPostDetails = async (url?: string) => {
@@ -43,6 +45,23 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
       void loadPostDetails();
     }
   }, [isOpen, postId]);
+
+  const canDeleteComment = (comment: PostComment) => {
+    if (!user || !post) {
+      return false;
+    }
+
+    const currentUserId = String(user.id);
+    return currentUserId === String(comment.userId) || currentUserId === String(post.userId);
+  };
+
+  const handleOpenDeleteCommentModal = (comment: PostComment) => {
+    if (!canDeleteComment(comment)) {
+      return;
+    }
+
+    setCommentPendingDelete(comment.id);
+  };
 
   if (!isOpen || !postId) {
     return null;
@@ -136,12 +155,23 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                         className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/30"
                       >
                         <div className="mb-2 flex items-center justify-between gap-3">
-                          <span className="font-medium text-gray-800 dark:text-gray-200">
-                            {comment.userName}
-                          </span>
-                          <span className="text-xs text-gray-500 dark:text-gray-400">
-                            {new Date(comment.createdAt).toLocaleString()}
-                          </span>
+                          <div className="flex flex-col gap-1">
+                            <span className="font-medium text-gray-800 dark:text-gray-200">
+                              {comment.userName}
+                            </span>
+                            <span className="text-xs text-gray-500 dark:text-gray-400">
+                              {new Date(comment.createdAt).toLocaleString()}
+                            </span>
+                          </div>
+                          {canDeleteComment(comment) && (
+                            <button
+                              onClick={() => handleOpenDeleteCommentModal(comment)}
+                              className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-3 py-2 text-xs font-medium text-red-700 transition-colors hover:bg-red-50 dark:border-red-800 dark:text-red-300 dark:hover:bg-red-900/30"
+                            >
+                              <Icon name="trash" className="h-4 w-4" />
+                              {t("post.comments.delete.trigger")}
+                            </button>
+                          )}
                         </div>
                         <p className="text-sm text-gray-700 dark:text-gray-300">
                           {comment.description}
@@ -190,6 +220,16 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
         postId={postId}
         onClose={() => setIsCommentModalOpen(false)}
         onCreated={() => void loadPostDetails()}
+      />
+
+      <CommentDeleteConfirmModal
+        isOpen={commentPendingDelete !== null}
+        commentId={commentPendingDelete}
+        onClose={() => setCommentPendingDelete(null)}
+        onDeleted={() => {
+          setCommentPendingDelete(null);
+          void loadPostDetails();
+        }}
       />
     </div>
   );

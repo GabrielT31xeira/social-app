@@ -38,6 +38,12 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
   };
 
   const handleOpenDeleteModal = (postId: string, postTitle: string) => {
+    const postOwner = posts.find((post) => post.id === postId)?.userId;
+
+    if (!user || !postOwner || String(user.id) !== String(postOwner)) {
+      return;
+    }
+
     setPostPendingDelete({ id: postId, title: postTitle });
   };
 
@@ -121,7 +127,7 @@ export function PostFeed({ maxPosts }: PostFeedProps) {
               <p className="mb-6 text-gray-600 dark:text-gray-300">{post.body}</p>
 
               <div className="flex justify-end gap-3">
-                {user?.id === post.userId && (
+                {user && String(user.id) === String(post.userId) && (
                   <button
                     onClick={(event) => {
                       event.stopPropagation();

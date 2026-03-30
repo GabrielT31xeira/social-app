@@ -78,7 +78,18 @@
       "placeholder": "Esse e um comentario de teste.",
       "submit": "Enviar comentario",
       "success": "Comentario enviado com sucesso!",
-      "error": "Erro ao adicionar comentario. Tente novamente."
+      "error": "Erro ao adicionar comentario. Tente novamente.",
+      "delete": {
+        "trigger": "Apagar",
+        "title": "Apagar comentário",
+        "description": "Tem certeza que deseja apagar este comentário?",
+        "warning": "Essa ação não pode ser desfeita.",
+        "confirm": "Sim, apagar",
+        "cancel": "Cancelar",
+        "close": "Fechar modal de confirmação",
+        "success": "Comentário apagado com sucesso!",
+        "error": "Erro ao apagar o comentário. Tente novamente."
+      }
     },
     "delete": {
       "trigger": "Apagar",

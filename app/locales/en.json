@@ -78,7 +78,18 @@
       "placeholder": "This is a test comment.",
       "submit": "Send comment",
       "success": "Comment sent successfully!",
-      "error": "Error adding comment. Please try again."
+      "error": "Error adding comment. Please try again.",
+      "delete": {
+        "trigger": "Delete",
+        "title": "Delete comment",
+        "description": "Are you sure you want to delete this comment?",
+        "warning": "This action cannot be undone.",
+        "confirm": "Yes, delete",
+        "cancel": "Cancel",
+        "close": "Close confirmation modal",
+        "success": "Comment deleted successfully!",
+        "error": "Error deleting the comment. Please try again."
+      }
     },
     "delete": {
       "trigger": "Delete",

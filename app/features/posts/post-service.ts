@@ -72,6 +72,18 @@ export const postService = {
     }
   },
 
+  async deleteComment(commentId: string): Promise<ApiResult<null>> {
+    try {
+      const response = await apiClient.delete<ApiResult<null>>(`comments/${commentId}/destroy`);
+      return response.data;
+    } catch (error: any) {
+      return error.response?.data || {
+        success: false,
+        message: "Erro ao apagar comentário!",
+      };
+    }
+  },
+
   async getPostDetails(postId: string, url?: string): Promise<PostDetailsResponse> {
     try {
       const response = await apiClient.get(
@@ -85,6 +97,7 @@ export const postService = {
           id: apiResponse.post.id,
           title: apiResponse.post.title,
           content: apiResponse.post.content,
+          userId: apiResponse.post.user_id,
         },
         comments: comments.data.map((comment: any) => ({
           id: comment.id,
