@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
 import authService from "~/features/auth/auth-service";
+import type { User } from "~/features/auth/types";
 import { PostDeleteConfirmModal } from "~/features/posts/components/PostDeleteConfirmModal";
 import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
 import { usePosts } from "~/features/posts/hooks/usePosts";
@@ -11,12 +12,13 @@ import { Icon } from "~/shared/components/Icons";
 interface PostFeedProps {
   maxPosts?: number;
   reloadKey?: number;
+  currentUser?: User | null;
 }
 
-export function PostFeed({ maxPosts, reloadKey = 0 }: PostFeedProps) {
+export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps) {
   const { t } = useTranslation();
   const { posts, meta, links, loading, error, reloadPosts } = usePosts({ maxPosts, reloadKey });
-  const user = authService.getUser();
+  const user = currentUser ?? authService.getUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [postPendingDelete, setPostPendingDelete] = useState<{ id: string; title: string } | null>(
     null,

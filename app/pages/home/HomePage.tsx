@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import { resolveAvatarUrl } from "~/features/auth/avatar-url";
 import { UserProfileModal } from "~/features/auth/components/UserProfileModal";
+import { getStoredToken } from "~/features/auth/auth-storage";
 import authService from "~/features/auth/auth-service";
+import type { User } from "~/features/auth/types";
 import { PostComposerModal } from "~/features/posts/components/PostComposerModal";
 import { PostFeed } from "~/features/posts/components/PostFeed";
 import { Icon } from "~/shared/components/Icons";
@@ -32,6 +34,38 @@ export default function HomePage() {
   const refreshPosts = () => {
     setPostsReloadKey((current) => current + 1);
   };
+
+  useEffect(() => {
+    if (!getStoredToken()) {
+      setUserData(null);
+      return;
+    }
+
+    const syncUser = async () => {
+      try {
+        const result = await authService.getMe();
+
+        if (!result.success) {
+          return;
+        }
+
+        setUserData({
+          id: result.data.id,
+          name: result.data.name,
+          email: result.data.email,
+          char_name: result.data.char_name,
+          avatar_url: result.data.avatar_url,
+          email_verified_at: null,
+          created_at: result.data.created_at,
+          updated_at: result.data.updated_at,
+        } satisfies User);
+      } catch {
+        setUserData(authService.getUser());
+      }
+    };
+
+    void syncUser();
+  }, []);
 
   const openPostComposer = () => {
     if (userData) {
@@ -115,7 +149,7 @@ export default function HomePage() {
         onProfileUpdated={setUserData}
       />
 
-      <PostFeed maxPosts={15} reloadKey={postsReloadKey} />
+      <PostFeed maxPosts={15} reloadKey={postsReloadKey} currentUser={userData} />
 
       <footer className="mt-12 border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800">
         <div className="mx-auto max-w-2xl px-4 text-center">

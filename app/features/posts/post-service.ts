@@ -20,8 +20,8 @@ export const postService = {
           id: post.id,
           title: post.title,
           body: post.content,
-          userId: post.user_id,
-          userName: post.user?.char_name ?? "Unknown",
+          userId: String(post.user_id ?? post.user?.id ?? ""),
+          userName: post.user?.char_name ?? post.char_name ?? "Unknown",
           commentsCount: Number(post.comments_count ?? 0),
         })),
         meta: apiResponse.meta ?? null,
@@ -39,7 +39,13 @@ export const postService = {
 
   async createPost(data: CreatePostPayload) {
     try {
-      const response = await apiClient.post("post/store", data);
+      const contents = data.contents.map((content) => content.trim()).filter(Boolean);
+      const payload =
+        contents.length === 1
+          ? { title: data.title, content: contents[0], contents }
+          : { title: data.title, contents };
+
+      const response = await apiClient.post("post/store", payload);
       return response.data;
     } catch (error: any) {
       return error.response?.data || {
@@ -116,33 +122,40 @@ export const postService = {
   async getPostDetails(postId: string, url?: string): Promise<PostDetailsResponse> {
     try {
       const response = await apiClient.get(
-        url?.startsWith("http") ? url : `posts/${postId}/comments`,
+        url?.startsWith("http") ? url : `posts/${postId}`,
       );
       const apiResponse = response.data.data;
-      const comments = apiResponse.comments;
+      const contents = Array.isArray(apiResponse.contents)
+        ? apiResponse.contents
+        : apiResponse.content
+          ? [apiResponse.content]
+          : [];
+      const comments = apiResponse.comments ?? null;
 
       return {
         post: {
-          id: apiResponse.post.id,
-          title: apiResponse.post.title,
-          content: apiResponse.post.content,
-          userId: apiResponse.post.user_id,
+          id: apiResponse.id,
+          title: apiResponse.title,
+          contents,
+          userId: String(apiResponse.user_id ?? apiResponse.user?.id ?? ""),
         },
-        comments: comments.data.map((comment: any) => ({
-          id: comment.id,
-          description: comment.description,
-          userId: comment.user_id,
-          postId: comment.post_id,
-          createdAt: comment.created_at,
-          updatedAt: comment.updated_at,
-          userName: comment.user?.char_name ?? "Unknown",
-        })),
+        comments: comments
+          ? comments.data.map((comment: any) => ({
+              id: comment.id,
+              description: comment.description,
+              userId: comment.user_id,
+              postId: comment.post_id,
+              createdAt: comment.created_at,
+              updatedAt: comment.updated_at,
+              userName: comment.user?.char_name ?? "Unknown",
+            }))
+          : [],
         commentsMeta: {
-          current_page: comments.current_page,
-          last_page: comments.last_page,
-          total: comments.total,
-          next_page_url: comments.next_page_url,
-          prev_page_url: comments.prev_page_url,
+          current_page: comments?.current_page ?? 1,
+          last_page: comments?.last_page ?? 1,
+          total: comments?.total ?? 0,
+          next_page_url: comments?.next_page_url ?? null,
+          prev_page_url: comments?.prev_page_url ?? null,
         } satisfies CommentsMeta,
       };
     } catch (error: any) {

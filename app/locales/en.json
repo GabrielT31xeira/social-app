@@ -107,6 +107,10 @@
       "description": "Description",
       "title": "Title",
       "content": "Content",
+      "contents": "Content blocks",
+      "blockLabel": "Block {{index}}",
+      "addBlock": "Add block",
+      "removeBlock": "Remove block",
       "cancel": "Cancel",
       "submit": "Submit",
       "sucess": "New post created!"
@@ -159,6 +163,8 @@
     "details": {
       "title": "Post details",
       "subtitle": "See the full content and comments for this post.",
+      "blockLabel": "Block {{index}}",
+      "emptyContent": "This post does not have content blocks.",
       "loadErrorToast": "Failed to load post details",
       "loadErrorTitle": "Error loading post details",
       "commentsTitle": "Comments",

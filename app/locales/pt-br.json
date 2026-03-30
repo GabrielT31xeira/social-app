@@ -107,6 +107,10 @@
       "description": "Descricao",
       "title": "Titulo",
       "content": "Conteudo",
+      "contents": "Blocos de conteúdo",
+      "blockLabel": "Bloco {{index}}",
+      "addBlock": "Adicionar bloco",
+      "removeBlock": "Remover bloco",
       "cancel": "Cancelar",
       "submit": "Enviar",
       "sucess": "Publicacao enviada!"
@@ -159,6 +163,8 @@
     "details": {
       "title": "Detalhes do post",
       "subtitle": "Veja o conteudo completo e os comentarios deste post.",
+      "blockLabel": "Bloco {{index}}",
+      "emptyContent": "Este post não possui blocos de conteúdo.",
       "loadErrorToast": "Falha ao carregar detalhes do post",
       "loadErrorTitle": "Erro ao carregar detalhes do post",
       "commentsTitle": "Comentarios",

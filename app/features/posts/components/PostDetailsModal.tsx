@@ -13,6 +13,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   const [post, setPost] = useState<PostDetails | null>(null);
   const [comments, setComments] = useState<PostComment[]>([]);
   const [commentsMeta, setCommentsMeta] = useState<CommentsMeta | null>(null);
+  const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
@@ -32,6 +33,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
       setPost(response.post);
       setComments(response.comments);
       setCommentsMeta(response.commentsMeta);
+      setCurrentContentIndex(0);
     } catch (err: any) {
       setError(err.message);
       toast.error(t("post.details.loadErrorToast"));
@@ -127,7 +129,51 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                 </div>
 
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{post.title}</h3>
-                <p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">{post.content}</p>
+                <div className="space-y-4">
+                  {post.contents.length === 0 ? (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {t("post.details.emptyContent")}
+                    </p>
+                  ) : (
+                    <div className="rounded-xl border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-900/30">
+                      <div className="mb-4 flex items-center justify-between gap-4">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setCurrentContentIndex((current) => Math.max(current - 1, 0))
+                          }
+                          disabled={currentContentIndex === 0}
+                          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          <Icon name="chevronLeft" className="h-4 w-4" />
+                          {t("common.previous")}
+                        </button>
+
+                        <p className="text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                          {t("post.details.blockLabel", { index: currentContentIndex + 1 })}
+                        </p>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setCurrentContentIndex((current) =>
+                              Math.min(current + 1, post.contents.length - 1),
+                            )
+                          }
+                          disabled={currentContentIndex === post.contents.length - 1}
+                          className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-700 transition-colors disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700"
+                        >
+                          {t("common.next")}
+                          <Icon name="chevronRight" className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      <p className="whitespace-pre-wrap text-gray-700 dark:text-gray-300">
+                        {post.contents[currentContentIndex]}
+                      </p>
+                    </div>
+                  )}
+                </div>
               </section>
 
               <section className="space-y-4">

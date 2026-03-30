@@ -15,8 +15,7 @@ export interface Post {
 
 export interface CreatePostPayload {
   title: string;
-  content: string;
-  type_id: number;
+  contents: string[];
 }
 
 export interface CommentModalProps {
@@ -58,7 +57,7 @@ export interface CommentsMeta {
 export interface PostDetails {
   id: string;
   title: string;
-  content: string;
+  contents: string[];
   userId: string;
 }
 
