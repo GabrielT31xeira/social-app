@@ -124,6 +124,8 @@
       "submit": "Send comment",
       "success": "Comment sent successfully!",
       "error": "Error adding comment. Please try again.",
+      "loadErrorToast": "Failed to load comments",
+      "reactionError": "Error updating the comment reaction.",
       "delete": {
         "trigger": "Delete",
         "title": "Delete comment",

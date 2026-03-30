@@ -78,6 +78,45 @@ export const postService = {
     }
   },
 
+  async getPostComments(postId: string, url?: string, sort: PostSort = "recent") {
+    try {
+      const response = await apiClient.get(
+        url?.startsWith("http") ? url : buildSortedUrl(`posts/${postId}/comments`, sort),
+      );
+      const apiResponse = response.data.data;
+      const comments = apiResponse.comments;
+
+      return {
+        comments: comments.data.map((comment: any) => ({
+          id: comment.id,
+          description: comment.description,
+          userId: String(comment.user_id ?? comment.user?.id ?? ""),
+          postId: String(comment.post_id ?? postId),
+          createdAt: comment.created_at,
+          updatedAt: comment.updated_at ?? comment.created_at,
+          userName: comment.user?.char_name ?? comment.char_name ?? "Unknown",
+          likesCount: Number(comment.likes_count ?? 0),
+          dislikesCount: Number(comment.dislikes_count ?? 0),
+          myReaction: comment.my_reaction ?? null,
+        })),
+        commentsMeta: {
+          current_page: comments?.current_page ?? 1,
+          last_page: comments?.last_page ?? 1,
+          total: comments?.total ?? 0,
+          next_page_url: comments?.next_page_url ?? null,
+          prev_page_url: comments?.prev_page_url ?? null,
+        } satisfies CommentsMeta,
+      };
+    } catch (error: any) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Erro desconhecido ao buscar comentários";
+
+      throw new Error(`Falha ao carregar comentários: ${errorMessage}`);
+    }
+  },
+
   async getUserPosts(
     userId: string,
     url?: string,
@@ -158,6 +197,30 @@ export const postService = {
     }
   },
 
+  async reactToComment(commentId: string, type: "like" | "dislike") {
+    try {
+      const response = await apiClient.post(`comments/${commentId}/reaction`, { type });
+      return response.data;
+    } catch (error: any) {
+      return error.response?.data || {
+        success: false,
+        message: "Erro ao reagir ao comentário!",
+      };
+    }
+  },
+
+  async removeCommentReaction(commentId: string) {
+    try {
+      const response = await apiClient.delete(`comments/${commentId}/reaction`);
+      return response.data;
+    } catch (error: any) {
+      return error.response?.data || {
+        success: false,
+        message: "Erro ao remover reação do comentário!",
+      };
+    }
+  },
+
   async getPostDetails(postId: string, url?: string): Promise<PostDetailsResponse> {
     try {
       const response = await apiClient.get(
@@ -169,7 +232,6 @@ export const postService = {
         : apiResponse.content
           ? [apiResponse.content]
           : [];
-      const comments = apiResponse.comments ?? null;
 
       return {
         post: {
@@ -181,23 +243,13 @@ export const postService = {
           dislikesCount: Number(apiResponse.dislikes_count ?? 0),
           myReaction: apiResponse.my_reaction ?? null,
         },
-        comments: comments
-          ? comments.data.map((comment: any) => ({
-              id: comment.id,
-              description: comment.description,
-              userId: comment.user_id,
-              postId: comment.post_id,
-              createdAt: comment.created_at,
-              updatedAt: comment.updated_at,
-              userName: comment.user?.char_name ?? "Unknown",
-            }))
-          : [],
+        comments: [],
         commentsMeta: {
-          current_page: comments?.current_page ?? 1,
-          last_page: comments?.last_page ?? 1,
-          total: comments?.total ?? 0,
-          next_page_url: comments?.next_page_url ?? null,
-          prev_page_url: comments?.prev_page_url ?? null,
+          current_page: 1,
+          last_page: 1,
+          total: 0,
+          next_page_url: null,
+          prev_page_url: null,
         } satisfies CommentsMeta,
       };
     } catch (error: any) {

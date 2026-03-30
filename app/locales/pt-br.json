@@ -124,6 +124,8 @@
       "submit": "Enviar comentario",
       "success": "Comentario enviado com sucesso!",
       "error": "Erro ao adicionar comentario. Tente novamente.",
+      "loadErrorToast": "Falha ao carregar comentários",
+      "reactionError": "Erro ao atualizar a reação do comentário.",
       "delete": {
         "trigger": "Apagar",
         "title": "Apagar comentário",

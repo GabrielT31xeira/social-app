@@ -49,6 +49,9 @@ export interface PostComment {
   createdAt: string;
   updatedAt: string;
   userName: string;
+  likesCount: number;
+  dislikesCount: number;
+  myReaction: "like" | "dislike" | null;
 }
 
 export interface CommentsMeta {

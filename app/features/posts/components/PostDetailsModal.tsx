@@ -5,7 +5,7 @@ import authService from "~/features/auth/auth-service";
 import { CommentDeleteConfirmModal } from "~/features/posts/components/CommentDeleteConfirmModal";
 import { PostCommentModal } from "~/features/posts/components/PostCommentModal";
 import { postService } from "~/features/posts/post-service";
-import type { PostDetails, PostDetailsModalProps, PostComment, CommentsMeta } from "~/features/posts/types";
+import type { PostDetails, PostDetailsModalProps, PostComment, CommentsMeta, PostSort } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
 
 export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalProps) {
@@ -13,6 +13,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   const [post, setPost] = useState<PostDetails | null>(null);
   const [comments, setComments] = useState<PostComment[]>([]);
   const [commentsMeta, setCommentsMeta] = useState<CommentsMeta | null>(null);
+  const [commentsSort, setCommentsSort] = useState<PostSort>("recent");
   const [currentContentIndex, setCurrentContentIndex] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -20,7 +21,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   const [commentPendingDelete, setCommentPendingDelete] = useState<string | null>(null);
   const user = authService.getUser();
 
-  const loadPostDetails = async (url?: string) => {
+  const loadPostDetails = async () => {
     if (!postId) {
       return;
     }
@@ -29,10 +30,8 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
     setError(null);
 
     try {
-      const response = await postService.getPostDetails(postId, url);
+      const response = await postService.getPostDetails(postId);
       setPost(response.post);
-      setComments(response.comments);
-      setCommentsMeta(response.commentsMeta);
       setCurrentContentIndex(0);
     } catch (err: any) {
       setError(err.message);
@@ -42,11 +41,26 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
     }
   };
 
+  const loadComments = async (url?: string) => {
+    if (!postId) {
+      return;
+    }
+
+    try {
+      const response = await postService.getPostComments(postId, url, commentsSort);
+      setComments(response.comments);
+      setCommentsMeta(response.commentsMeta);
+    } catch (err: any) {
+      toast.error(err.message || t("post.comments.loadErrorToast"));
+    }
+  };
+
   useEffect(() => {
     if (isOpen && postId) {
       void loadPostDetails();
+      void loadComments();
     }
-  }, [isOpen, postId]);
+  }, [commentsSort, isOpen, postId]);
 
   const canDeleteComment = (comment: PostComment) => {
     if (!user || !post) {
@@ -89,6 +103,39 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
             myReaction: result.data?.my_reaction ?? null,
           }
         : current,
+    );
+  };
+
+  const handleCommentReaction = async (
+    commentId: string,
+    currentReaction: "like" | "dislike" | null,
+    nextReaction: "like" | "dislike",
+  ) => {
+    if (!user) {
+      return;
+    }
+
+    const result =
+      currentReaction === nextReaction
+        ? await postService.removeCommentReaction(commentId)
+        : await postService.reactToComment(commentId, nextReaction);
+
+    if (!result.success) {
+      toast.error(result.message || t("post.comments.reactionError"));
+      return;
+    }
+
+    setComments((currentComments) =>
+      currentComments.map((comment) =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              likesCount: Number(result.data?.likes_count ?? comment.likesCount),
+              dislikesCount: Number(result.data?.dislikes_count ?? comment.dislikesCount),
+              myReaction: result.data?.my_reaction ?? null,
+            }
+          : comment,
+      ),
     );
   };
 
@@ -237,11 +284,27 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                     <Icon name="messageCircle" className="h-5 w-5" />
                     {t("post.details.commentsTitle")}
                   </h4>
-                  {commentsMeta && (
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {t("post.details.commentsCount", { total: commentsMeta.total })}
+                  <div className="flex items-center gap-3">
+                    {commentsMeta && (
+                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                        {t("post.details.commentsCount", { total: commentsMeta.total })}
+                      </span>
+                    )}
+                    <span className="relative">
+                      <select
+                        value={commentsSort}
+                        onChange={(event) => setCommentsSort(event.target.value as PostSort)}
+                        className="appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-12 text-sm text-gray-700 outline-none transition-colors focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
+                      >
+                        <option value="recent">{t("post.feed.sort.recent")}</option>
+                        <option value="best_rated">{t("post.feed.sort.bestRated")}</option>
+                        <option value="worst_rated">{t("post.feed.sort.worstRated")}</option>
+                      </select>
+                      <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500 dark:text-gray-400">
+                        <Icon name="chevronDown" className="h-4 w-4" />
+                      </span>
                     </span>
-                  )}
+                  </div>
                 </div>
 
                 {comments.length === 0 ? (
@@ -277,6 +340,38 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                         <p className="text-sm text-gray-700 dark:text-gray-300">
                           {comment.description}
                         </p>
+                        <div className="mt-3 flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void handleCommentReaction(comment.id, comment.myReaction, "like")
+                            }
+                            disabled={!user}
+                            className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                              comment.myReaction === "like"
+                                ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                                : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                            }`}
+                          >
+                            <Icon name="thumbsUp" className="h-4 w-4" />
+                            {comment.likesCount}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              void handleCommentReaction(comment.id, comment.myReaction, "dislike")
+                            }
+                            disabled={!user}
+                            className={`inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-medium transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
+                              comment.myReaction === "dislike"
+                                ? "border-rose-300 bg-rose-50 text-rose-700 dark:border-rose-700 dark:bg-rose-900/30 dark:text-rose-300"
+                                : "border-gray-200 text-gray-600 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-900/30"
+                            }`}
+                          >
+                            <Icon name="thumbsDown" className="h-4 w-4" />
+                            {comment.dislikesCount}
+                          </button>
+                        </div>
                       </article>
                     ))}
                   </div>
@@ -285,7 +380,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                 {commentsMeta && commentsMeta.last_page > 1 && (
                   <div className="flex items-center justify-between gap-4 border-t border-gray-200 pt-4 dark:border-gray-700">
                     <button
-                      onClick={() => void loadPostDetails(commentsMeta.prev_page_url || undefined)}
+                      onClick={() => void loadComments(commentsMeta.prev_page_url || undefined)}
                       disabled={!commentsMeta.prev_page_url}
                       className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                     >
@@ -301,7 +396,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                     </span>
 
                     <button
-                      onClick={() => void loadPostDetails(commentsMeta.next_page_url || undefined)}
+                      onClick={() => void loadComments(commentsMeta.next_page_url || undefined)}
                       disabled={!commentsMeta.next_page_url}
                       className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
                     >
@@ -320,7 +415,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
         isOpen={isCommentModalOpen}
         postId={postId}
         onClose={() => setIsCommentModalOpen(false)}
-        onCreated={() => void loadPostDetails()}
+        onCreated={() => void loadComments()}
       />
 
       <CommentDeleteConfirmModal
@@ -329,7 +424,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
         onClose={() => setCommentPendingDelete(null)}
         onDeleted={() => {
           setCommentPendingDelete(null);
-          void loadPostDetails();
+          void loadComments();
         }}
       />
     </div>
