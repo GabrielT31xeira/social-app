@@ -9,6 +9,7 @@ type IconName =
   | "languages"
   | "logOut"
   | "plusSquare"
+  | "chevronDown"
   | "eye"
   | "messageCircle"
   | "trash"
@@ -56,6 +57,8 @@ export function Icon({ name, className = "h-5 w-5", ...props }: IconProps) {
       return <svg {...common}><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><path d="m16 17 5-5-5-5" /><path d="M21 12H9" /></svg>;
     case "plusSquare":
       return <svg {...common}><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M12 8v8" /><path d="M8 12h8" /></svg>;
+    case "chevronDown":
+      return <svg {...common}><path d="m6 9 6 6 6-6" /></svg>;
     case "eye":
       return <svg {...common}><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" /><circle cx="12" cy="12" r="3" /></svg>;
     case "messageCircle":

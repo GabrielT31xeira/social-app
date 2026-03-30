@@ -18,11 +18,18 @@ export function RegisterPage() {
     char_name: "",
     password: "",
     password_confirmation: "",
+    avatar: null,
   });
   const [loading, setLoading] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
+    const { name, value, files } = event.target;
+
+    if (name === "avatar") {
+      setFormData((current) => ({ ...current, avatar: files?.[0] ?? null }));
+      return;
+    }
+
     setFormData((current) => ({ ...current, [name]: value }));
   };
 
@@ -118,6 +125,30 @@ export function RegisterPage() {
           placeholder={t("register.confirmPlaceholder")}
           icon={<Icon name="lock" className="h-5 w-5" />}
         />
+
+        <div>
+          <label
+            htmlFor="avatar"
+            className="mb-2 block text-sm font-semibold uppercase tracking-wider text-gray-800 opacity-75 dark:text-gray-200"
+          >
+            {t("register.avatar")}
+          </label>
+          <label
+            htmlFor="avatar"
+            className="flex cursor-pointer items-center gap-3 rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 text-sm text-gray-600 transition-colors hover:border-indigo-400 hover:text-indigo-600 dark:border-gray-700 dark:text-gray-300 dark:hover:border-indigo-400 dark:hover:text-indigo-300"
+          >
+            <Icon name="user" className="h-5 w-5" />
+            <span>{formData.avatar?.name ?? t("register.avatarPlaceholder")}</span>
+          </label>
+          <input
+            type="file"
+            id="avatar"
+            name="avatar"
+            accept="image/*"
+            onChange={handleChange}
+            className="sr-only"
+          />
+        </div>
 
         <button
           type="submit"

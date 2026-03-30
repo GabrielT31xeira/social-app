@@ -39,6 +39,8 @@
     "namePlaceholder": "Your name",
     "email": "Email",
     "emailPlaceholder": "your@email.com",
+    "avatar": "Avatar",
+    "avatarPlaceholder": "Select an image",
     "password": "Password",
     "passwordPlaceholder": "********",
     "confirmPassword": "Confirm password",
@@ -58,6 +60,35 @@
     "footer": "(c) {{year}} {{name}} Blog",
     "post": {
       "create": "new post"
+    }
+  },
+  "profile": {
+    "title": "User profile",
+    "subtitle": "Details loaded from your account.",
+    "open": "View profile",
+    "close": "Close profile modal",
+    "logout": "Logout",
+    "logoutError": "Error logging out.",
+    "loadError": "Error loading profile.",
+    "avatar": {
+      "add": "Add avatar",
+      "change": "Change avatar",
+      "remove": "Remove avatar",
+      "removeTitle": "Remove avatar",
+      "removeDescription": "Are you sure you want to remove your avatar?",
+      "removeWarning": "This action cannot be undone.",
+      "removeSuccess": "Avatar removed successfully!",
+      "removeError": "Error removing avatar.",
+      "uploadSuccess": "Avatar updated successfully!",
+      "uploadError": "Error uploading avatar.",
+      "cancel": "Cancel",
+      "close": "Close confirmation modal"
+    },
+    "fields": {
+      "name": "Name",
+      "nickname": "Nickname",
+      "email": "Email",
+      "createdAt": "Created at"
     }
   },
   "post": {

@@ -21,6 +21,10 @@ export function clearSession() {
   localStorage.removeItem(USER_KEY);
 }
 
+export function updateStoredUser(user: User) {
+  localStorage.setItem(USER_KEY, JSON.stringify(user));
+}
+
 export function getStoredUser(): User | null {
   if (typeof window === "undefined") {
     return null;
@@ -33,4 +37,3 @@ export function getStoredUser(): User | null {
     return null;
   }
 }
-
