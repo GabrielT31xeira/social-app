@@ -1,87 +1,141 @@
-# WelcomePage to React Router!
+# Social App
 
-A modern, production-ready template for building full-stack React applications using React Router.
+## PT-BR
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+### Requisitos
 
-## Features
+- Docker instalado
+- Backend da API rodando e acessível
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+### Configuração
 
-## Getting Started
+1. Crie um arquivo `.env` na raiz do projeto.
+2. Use o `.env.example` como base:
 
-### Installation
-
-Install the dependencies:
+Linux/macOS:
 
 ```bash
-npm install
+cp .env.example .env
 ```
 
-### Development
+PowerShell:
 
-Start the development server with HMR:
+```powershell
+Copy-Item .env.example .env
+```
+
+3. Ajuste a variável `VITE_API_BASE_URL` se necessário.
+
+Exemplo:
+
+```env
+VITE_API_BASE_URL=http://localhost:84/api
+```
+
+Importante:
+
+- Essa variável é usada no momento do `docker build`.
+- Se você alterar a URL da API, precisa gerar a imagem novamente.
+
+### Build da imagem
 
 ```bash
-npm run dev
+docker build -t social-app .
 ```
 
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
+### Rodar o container
 
 ```bash
-npm run build
+docker run --rm -p 3000:3000 --name social-app social-app
 ```
 
-## Deployment
+### Acessar a aplicação
 
-### Docker Deployment
+Abra no navegador:
 
-To build and run using Docker:
+```text
+http://localhost:3000
+```
+
+### Parar o container
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+docker stop social-app
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+### Observações
 
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+- A imagem usa o `Dockerfile` da raiz do projeto.
+- O container expõe a aplicação na porta `3000`.
+- O backend precisa aceitar requisições do frontend na URL configurada em `VITE_API_BASE_URL`.
 
 ---
 
-Built with ❤️ using React Router.
+## English
+
+### Requirements
+
+- Docker installed
+- The backend API running and reachable
+
+### Setup
+
+1. Create a `.env` file in the project root.
+2. Use `.env.example` as the base file:
+
+Linux/macOS:
+
+```bash
+cp .env.example .env
+```
+
+PowerShell:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+3. Update `VITE_API_BASE_URL` if needed.
+
+Example:
+
+```env
+VITE_API_BASE_URL=http://localhost:84/api
+```
+
+Important:
+
+- This variable is read during `docker build`.
+- If you change the API URL, you must rebuild the image.
+
+### Build the image
+
+```bash
+docker build -t social-app .
+```
+
+### Run the container
+
+```bash
+docker run --rm -p 3000:3000 --name social-app social-app
+```
+
+### Open the application
+
+Open this URL in your browser:
+
+```text
+http://localhost:3000
+```
+
+### Stop the container
+
+```bash
+docker stop social-app
+```
+
+### Notes
+
+- The image uses the root `Dockerfile`.
+- The container serves the app on port `3000`.
+- The backend must accept requests from the frontend at the URL configured in `VITE_API_BASE_URL`.
