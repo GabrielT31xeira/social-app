@@ -86,6 +86,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   let message = "Oops!";
   let details = "An unexpected error occurred.";
   let stack: string | undefined;
+  let extra: string | undefined;
 
   if (isRouteErrorResponse(error)) {
     message = error.status === 404 ? "404" : "Error";
@@ -93,15 +94,32 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
       error.status === 404
         ? "The requested page could not be found."
         : error.statusText || details;
-  } else if (import.meta.env.DEV && error && error instanceof Error) {
+    extra =
+      error.data == null
+        ? undefined
+        : typeof error.data === "string"
+          ? error.data
+          : JSON.stringify(error.data, null, 2);
+  } else if (error && error instanceof Error) {
     details = error.message;
     stack = error.stack;
+  } else if (error != null) {
+    extra = typeof error === "string" ? error : JSON.stringify(error, null, 2);
+  }
+
+  if (typeof console !== "undefined") {
+    console.error("Route error boundary caught:", error);
   }
 
   return (
     <main className="container mx-auto p-4 pt-16">
       <h1>{message}</h1>
       <p>{details}</p>
+      {extra && (
+        <pre className="w-full overflow-x-auto p-4">
+          <code>{extra}</code>
+        </pre>
+      )}
       {stack && (
         <pre className="w-full overflow-x-auto p-4">
           <code>{stack}</code>

@@ -5,9 +5,9 @@
 ### Requisitos
 
 - Docker instalado
-- Backend da API rodando e acessível
+- Backend da API rodando e acessivel
 
-### Configuração
+### Configuracao
 
 1. Crie um arquivo `.env` na raiz do projeto.
 2. Use o `.env.example` como base:
@@ -24,18 +24,22 @@ PowerShell:
 Copy-Item .env.example .env
 ```
 
-3. Ajuste a variável `VITE_API_BASE_URL` se necessário.
+3. Ajuste `VITE_API_BASE_URL` se necessario.
 
 Exemplo:
 
 ```env
 VITE_API_BASE_URL=http://localhost:84/api
+VITE_LARAVEL_CSRF_ENABLED=true
+# VITE_LARAVEL_CSRF_URL=http://localhost:84/sanctum/csrf-cookie
 ```
 
 Importante:
 
-- Essa variável é usada no momento do `docker build`.
-- Se você alterar a URL da API, precisa gerar a imagem novamente.
+- Essas variaveis sao usadas no momento do `docker build`.
+- Se voce alterar a URL da API, precisa gerar a imagem novamente.
+- Para backends Laravel, o frontend tenta buscar o cookie CSRF antes de refazer requisicoes que falhem com `419` ou `CSRF token mismatch`.
+- Use `VITE_LARAVEL_CSRF_URL` apenas se o endpoint `/sanctum/csrf-cookie` estiver em uma URL diferente do host da API.
 
 ### Build da imagem
 
@@ -49,7 +53,7 @@ docker build -t social-app .
 docker run --rm -p 3000:3000 --name social-app social-app
 ```
 
-### Acessar a aplicação
+### Acessar a aplicacao
 
 Abra no navegador:
 
@@ -63,11 +67,12 @@ http://localhost:3000
 docker stop social-app
 ```
 
-### Observações
+### Observacoes
 
 - A imagem usa o `Dockerfile` da raiz do projeto.
-- O container expõe a aplicação na porta `3000`.
-- O backend precisa aceitar requisições do frontend na URL configurada em `VITE_API_BASE_URL`.
+- O container expoe a aplicacao na porta `3000`.
+- O backend precisa aceitar requisicoes do frontend na URL configurada em `VITE_API_BASE_URL`.
+- Em integracoes com Laravel, o backend tambem precisa liberar credenciais no CORS e configurar `SESSION_DOMAIN` e `SANCTUM_STATEFUL_DOMAINS`.
 
 ---
 
@@ -101,12 +106,16 @@ Example:
 
 ```env
 VITE_API_BASE_URL=http://localhost:84/api
+VITE_LARAVEL_CSRF_ENABLED=true
+# VITE_LARAVEL_CSRF_URL=http://localhost:84/sanctum/csrf-cookie
 ```
 
 Important:
 
-- This variable is read during `docker build`.
+- These variables are read during `docker build`.
 - If you change the API URL, you must rebuild the image.
+- For Laravel backends, the frontend will fetch the CSRF cookie before retrying requests that fail with `419` or `CSRF token mismatch`.
+- Use `VITE_LARAVEL_CSRF_URL` only when `/sanctum/csrf-cookie` is exposed from a different URL than the API host.
 
 ### Build the image
 
@@ -139,3 +148,4 @@ docker stop social-app
 - The image uses the root `Dockerfile`.
 - The container serves the app on port `3000`.
 - The backend must accept requests from the frontend at the URL configured in `VITE_API_BASE_URL`.
+- For Laravel integrations, the backend must also allow credentials in CORS and configure `SESSION_DOMAIN` and `SANCTUM_STATEFUL_DOMAINS`.

@@ -1,6 +1,6 @@
 import { type ChangeEvent, type FormEvent, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { getAllApiErrors, getReadableError } from "~/features/auth/auth-errors";
 import { AuthInput } from "~/features/auth/components/AuthInput";
