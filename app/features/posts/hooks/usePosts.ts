@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
+import { getReadableError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { Post, PostsLinks, PostsMeta, PostSort } from "~/features/posts/types";
 
@@ -24,8 +25,8 @@ export function usePosts({ maxPosts, reloadKey = 0, sort = "recent" }: UsePostsO
       setPosts(maxPosts ? response.posts.slice(0, maxPosts) : response.posts);
       setMeta(response.meta);
       setLinks(response.links);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(getReadableError(err, "Falha ao carregar posts."));
     } finally {
       setLoading(false);
     }

@@ -13,6 +13,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import i18n from "./i18n/config";
 import "react-toastify/dist/ReactToastify.css";
+import { AuthProvider } from "~/features/auth/AuthProvider";
 import { applyTheme, getStoredTheme } from "~/shared/preferences";
 
 export const links: Route.LinksFunction = () => [
@@ -72,7 +73,9 @@ export default function App() {
   return (
     <>
       <I18nextProvider i18n={i18n}>
-        <Outlet />
+        <AuthProvider>
+          <Outlet />
+        </AuthProvider>
       </I18nextProvider>
       <ToastContainer position="top-right" autoClose={5000} theme={toastTheme} />
     </>

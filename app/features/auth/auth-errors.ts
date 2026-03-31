@@ -1,4 +1,5 @@
 import type { ApiError } from "~/services/api/responses";
+import { normalizeApiError } from "~/services/api/api-errors";
 
 export function getFirstApiError(error: ApiError, fallback: string) {
   if (error.errors && typeof error.errors === "object") {
@@ -17,9 +18,5 @@ export function getAllApiErrors(error: ApiError) {
 }
 
 export function getReadableError(error: unknown, fallback: string) {
-  if (!error || typeof error !== "object") {
-    return fallback;
-  }
-
-  return getFirstApiError(error as ApiError, fallback);
+  return getFirstApiError(normalizeApiError(error, fallback), fallback);
 }

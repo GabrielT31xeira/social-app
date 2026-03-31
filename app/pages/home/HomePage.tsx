@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router";
 import { resolveAvatarUrl } from "~/features/auth/avatar-url";
+import { useAuth } from "~/features/auth/AuthProvider";
 import { UserProfileModal } from "~/features/auth/components/UserProfileModal";
-import { getStoredToken } from "~/features/auth/auth-storage";
-import authService from "~/features/auth/auth-service";
-import type { User } from "~/features/auth/types";
 import { PostComposerModal } from "~/features/posts/components/PostComposerModal";
 import { PostFeed } from "~/features/posts/components/PostFeed";
 import { Icon } from "~/shared/components/Icons";
@@ -22,53 +20,20 @@ function getInitials(name?: string, charName?: string) {
 }
 
 export default function HomePage() {
-  const initialUser = authService.getUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [userData, setUserData] = useState(initialUser);
   const [postsReloadKey, setPostsReloadKey] = useState(0);
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const refreshPosts = () => {
     setPostsReloadKey((current) => current + 1);
   };
 
-  useEffect(() => {
-    if (!getStoredToken()) {
-      setUserData(null);
-      return;
-    }
-
-    const syncUser = async () => {
-      try {
-        const result = await authService.getMe();
-
-        if (!result.success) {
-          return;
-        }
-
-        setUserData({
-          id: result.data.id,
-          name: result.data.name,
-          email: result.data.email,
-          char_name: result.data.char_name,
-          avatar_url: result.data.avatar_url,
-          email_verified_at: null,
-          created_at: result.data.created_at,
-          updated_at: result.data.updated_at,
-        } satisfies User);
-      } catch {
-        setUserData(authService.getUser());
-      }
-    };
-
-    void syncUser();
-  }, []);
-
   const openPostComposer = () => {
-    if (userData) {
+    if (user) {
       setIsModalOpen(true);
       return;
     }
@@ -82,26 +47,26 @@ export default function HomePage() {
         <div className="mx-auto max-w-7xl px-4 py-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              {userData ? (
+              {user ? (
                 <button
                   onClick={() => setIsProfileModalOpen(true)}
                   className="inline-flex items-center gap-3 rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-left transition-colors hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-900/30 dark:hover:bg-gray-900/60"
                 >
-                  {userData.avatar_url ? (
+                  {user.avatar_url ? (
                     <img
-                      src={resolveAvatarUrl(userData.id, userData.avatar_url) ?? undefined}
-                      alt={userData.char_name}
+                      src={resolveAvatarUrl(user.id, user.avatar_url) ?? undefined}
+                      alt={user.char_name}
                       className="h-11 w-11 rounded-full object-cover"
                     />
                   ) : (
                     <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100 font-semibold text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
-                      {getInitials(userData.name, userData.char_name)}
+                      {getInitials(user.name, user.char_name)}
                     </div>
                   )}
 
                   <div className="flex flex-col items-start">
                     <span className="text-xl font-bold text-gray-800 dark:text-white">
-                      {userData.char_name}
+                      {user.char_name}
                     </span>
                     <span className="text-sm text-gray-500 dark:text-gray-400">
                       {t("profile.open")}
@@ -146,17 +111,16 @@ export default function HomePage() {
       <UserProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
-        onProfileUpdated={setUserData}
       />
 
-      <PostFeed maxPosts={15} reloadKey={postsReloadKey} currentUser={userData} />
+      <PostFeed maxPosts={15} reloadKey={postsReloadKey} />
 
       <footer className="mt-12 border-t border-gray-200 bg-white py-6 dark:border-gray-700 dark:bg-gray-800">
         <div className="mx-auto max-w-2xl px-4 text-center">
           <p className="text-gray-600 dark:text-gray-400">
             {t("home.footer", {
               year: new Date().getFullYear(),
-              name: userData ? userData.char_name : "",
+              name: user ? user.char_name : "",
             })}
           </p>
         </div>

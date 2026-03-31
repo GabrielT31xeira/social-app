@@ -2,10 +2,17 @@ import axios from "axios";
 import { getI18n } from "react-i18next";
 import { clearSession, getStoredToken } from "~/features/auth/auth-storage";
 
+const DEFAULT_API_BASE_URL = "http://localhost:84/api";
+
+function normalizeBaseUrl(baseUrl: string) {
+  return baseUrl.endsWith("/") ? baseUrl : `${baseUrl}/`;
+}
+
 const apiClient = axios.create({
-  baseURL: "http://localhost:84/api/",
+  baseURL: normalizeBaseUrl(import.meta.env.VITE_API_BASE_URL || DEFAULT_API_BASE_URL),
   timeout: 10000,
   headers: {
+    Accept: "application/json",
     "Content-Type": "application/json",
   },
 });

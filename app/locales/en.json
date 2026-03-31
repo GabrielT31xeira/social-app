@@ -9,8 +9,8 @@
     "socialLinks": "Social Links",
     "notice": {
       "title": "About this project",
-      "description": "This project uses the public API jsonplaceholder.typicode to demonstrate HTTP requests and data integration in React. It was developed for educational purposes to learn React and its practical applications.",
-      "linkText": "JSONPlaceholder"
+      "description": "This project uses a dedicated API for authentication, posts, comments, reactions and profile management. It was built to practice modern frontend architecture with React and real backend integration.",
+      "linkText": "Explore integration"
     }
   },
   "welcome": {
@@ -22,12 +22,12 @@
       "item1": "Multi-language support (Portuguese and English)",
       "item2": "Customizable dark and light theme",
       "item3": "Responsive design with Tailwind CSS",
-      "item4": "Integration with external APIs"
+      "item4": "Integration with a dedicated API"
     },
     "integration": {
-      "title": "JSONPlaceholder Integration",
-      "description": "This project integrates the public JSONPlaceholder API, allowing you to practice HTTP requests, data management and API consumption in a real React application.",
-      "link": "Learn about JSONPlaceholder"
+      "title": "API Integration",
+      "description": "The application consumes a dedicated API for authentication, feed, comments, reactions and profile management.",
+      "link": "View integration"
     },
     "cta": "View Profile"
   },

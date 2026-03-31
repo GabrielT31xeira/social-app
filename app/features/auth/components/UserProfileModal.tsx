@@ -1,18 +1,19 @@
-import { type ChangeEvent, useEffect, useState } from "react";
+import { type ChangeEvent, useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import { getReadableError } from "~/features/auth/auth-errors";
+import { useAuth } from "~/features/auth/AuthProvider";
 import { resolveAvatarUrl } from "~/features/auth/avatar-url";
 import { RemoveAvatarConfirmModal } from "~/features/auth/components/RemoveAvatarConfirmModal";
 import authService from "~/features/auth/auth-service";
-import type { MeResponseData, User } from "~/features/auth/types";
+import type { MeResponseData } from "~/features/auth/types";
 import { Icon } from "~/shared/components/Icons";
+import { ModalDialog } from "~/shared/components/ModalDialog";
 
 interface UserProfileModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onProfileUpdated?: (user: User) => void;
 }
 
 function getInitials(name?: string, charName?: string) {
@@ -25,27 +26,20 @@ function getInitials(name?: string, charName?: string) {
     .join("");
 }
 
-export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProfileModalProps) {
+export function UserProfileModal({ isOpen, onClose }: UserProfileModalProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { logout } = useAuth();
   const [profile, setProfile] = useState<MeResponseData | null>(null);
   const [loading, setLoading] = useState(false);
   const [uploadingAvatar, setUploadingAvatar] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isRemoveAvatarModalOpen, setIsRemoveAvatarModalOpen] = useState(false);
+  const titleId = useId();
+  const descriptionId = useId();
 
   const syncProfile = (data: MeResponseData) => {
     setProfile(data);
-    onProfileUpdated?.({
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      char_name: data.char_name,
-      avatar_url: data.avatar_url,
-      email_verified_at: null,
-      created_at: data.created_at,
-      updated_at: data.updated_at,
-    });
   };
 
   const reloadProfile = async () => {
@@ -62,7 +56,13 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
 
   const handleLogout = async () => {
     try {
-      await authService.logout();
+      const result = await logout();
+
+      if (!result.success) {
+        toast.error(result.message || t("profile.logoutError"));
+        return;
+      }
+
       onClose();
       navigate("/home");
     } catch (err: unknown) {
@@ -91,7 +91,7 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
     };
 
     void loadProfile();
-  }, [isOpen, onProfileUpdated, t]);
+  }, [isOpen, t]);
 
   const handleAvatarChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -125,22 +125,28 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-
-      <div className="relative z-10 mx-4 w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
+    <ModalDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId={titleId}
+      descriptionId={descriptionId}
+      panelClassName="max-w-lg"
+    >
+      <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
         <div className="border-b border-gray-200 p-6 dark:border-gray-700">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
+              <h2 id={titleId} className="text-2xl font-bold text-gray-900 dark:text-white">
                 {t("profile.title")}
               </h2>
-              <p className="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              <p id={descriptionId} className="mt-2 text-sm text-gray-600 dark:text-gray-300">
                 {t("profile.subtitle")}
               </p>
             </div>
             <button
+              type="button"
               onClick={onClose}
+              data-autofocus="true"
               className="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
               aria-label={t("profile.close")}
             >
@@ -280,19 +286,9 @@ export function UserProfileModal({ isOpen, onClose, onProfileUpdated }: UserProf
 
           const nextProfile = { ...profile, avatar_url: null };
           setProfile(nextProfile);
-          onProfileUpdated?.({
-            id: nextProfile.id,
-            name: nextProfile.name,
-            email: nextProfile.email,
-            char_name: nextProfile.char_name,
-            avatar_url: nextProfile.avatar_url,
-            email_verified_at: null,
-            created_at: nextProfile.created_at,
-            updated_at: nextProfile.updated_at,
-          });
           setIsRemoveAvatarModalOpen(false);
         }}
       />
-    </div>
+    </ModalDialog>
   );
 }

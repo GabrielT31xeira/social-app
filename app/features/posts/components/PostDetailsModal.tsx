@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import authService from "~/features/auth/auth-service";
+import { getReadableError } from "~/features/auth/auth-errors";
+import { useAuth } from "~/features/auth/AuthProvider";
 import { CommentDeleteConfirmModal } from "~/features/posts/components/CommentDeleteConfirmModal";
 import { PostCommentModal } from "~/features/posts/components/PostCommentModal";
+import { PostSortSelect } from "~/features/posts/components/PostSortSelect";
 import { postService } from "~/features/posts/post-service";
 import type { PostDetails, PostDetailsModalProps, PostComment, CommentsMeta, PostSort } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
+import { ModalDialog } from "~/shared/components/ModalDialog";
+import { PaginationControls } from "~/shared/components/PaginationControls";
 
 export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalProps) {
   const { t } = useTranslation();
@@ -19,7 +23,9 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   const [error, setError] = useState<string | null>(null);
   const [isCommentModalOpen, setIsCommentModalOpen] = useState(false);
   const [commentPendingDelete, setCommentPendingDelete] = useState<string | null>(null);
-  const user = authService.getUser();
+  const { user } = useAuth();
+  const titleId = useId();
+  const descriptionId = useId();
 
   const loadPostDetails = async () => {
     if (!postId) {
@@ -33,8 +39,8 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
       const response = await postService.getPostDetails(postId);
       setPost(response.post);
       setCurrentContentIndex(0);
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(getReadableError(err, t("post.details.loadErrorTitle")));
       toast.error(t("post.details.loadErrorToast"));
     } finally {
       setLoading(false);
@@ -50,8 +56,8 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
       const response = await postService.getPostComments(postId, url, commentsSort);
       setComments(response.comments);
       setCommentsMeta(response.commentsMeta);
-    } catch (err: any) {
-      toast.error(err.message || t("post.comments.loadErrorToast"));
+    } catch (err: unknown) {
+      toast.error(getReadableError(err, t("post.comments.loadErrorToast")));
     }
   };
 
@@ -144,21 +150,29 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-
-      <div className="relative z-10 mx-4 max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
+    <ModalDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId={titleId}
+      descriptionId={descriptionId}
+      zIndexClassName="z-40"
+      panelClassName="max-h-[90vh] max-w-2xl"
+    >
+      <div className="max-h-[90vh] overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
         <div className="app-card-header p-6 text-white">
           <div className="flex items-center justify-between">
-            <h2 className="text-2xl font-bold">{t("post.details.title")}</h2>
+            <h2 id={titleId} className="text-2xl font-bold">{t("post.details.title")}</h2>
             <button
               onClick={onClose}
+              type="button"
+              data-autofocus="true"
               className="text-white/80 transition-colors hover:text-white"
+              aria-label={t("post.delete.close")}
             >
               <Icon name="x" className="h-6 w-6" />
             </button>
           </div>
-          <p className="mt-2 opacity-90">{t("post.details.subtitle")}</p>
+          <p id={descriptionId} className="mt-2 opacity-90">{t("post.details.subtitle")}</p>
         </div>
 
         <div className="max-h-[calc(90vh-96px)] overflow-y-auto p-6">
@@ -290,20 +304,7 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                         {t("post.details.commentsCount", { total: commentsMeta.total })}
                       </span>
                     )}
-                    <span className="relative">
-                      <select
-                        value={commentsSort}
-                        onChange={(event) => setCommentsSort(event.target.value as PostSort)}
-                        className="appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-12 text-sm text-gray-700 outline-none transition-colors focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-                      >
-                        <option value="recent">{t("post.feed.sort.recent")}</option>
-                        <option value="best_rated">{t("post.feed.sort.bestRated")}</option>
-                        <option value="worst_rated">{t("post.feed.sort.worstRated")}</option>
-                      </select>
-                      <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500 dark:text-gray-400">
-                        <Icon name="chevronDown" className="h-4 w-4" />
-                      </span>
-                    </span>
+                    <PostSortSelect value={commentsSort} onChange={setCommentsSort} />
                   </div>
                 </div>
 
@@ -378,32 +379,18 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
                 )}
 
                 {commentsMeta && commentsMeta.last_page > 1 && (
-                  <div className="flex items-center justify-between gap-4 border-t border-gray-200 pt-4 dark:border-gray-700">
-                    <button
-                      onClick={() => void loadComments(commentsMeta.prev_page_url || undefined)}
-                      disabled={!commentsMeta.prev_page_url}
-                      className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                    >
-                      <Icon name="chevronLeft" className="h-4 w-4" />
-                      {t("common.previous")}
-                    </button>
-
-                    <span className="text-sm text-gray-600 dark:text-gray-400">
-                      {t("post.details.pagination", {
-                        currentPage: commentsMeta.current_page,
-                        lastPage: commentsMeta.last_page,
-                      })}
-                    </span>
-
-                    <button
-                      onClick={() => void loadComments(commentsMeta.next_page_url || undefined)}
-                      disabled={!commentsMeta.next_page_url}
-                      className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
-                    >
-                      {t("common.next")}
-                      <Icon name="chevronRight" className="h-4 w-4" />
-                    </button>
-                  </div>
+                  <PaginationControls
+                    className="border-t border-gray-200 pt-4 dark:border-gray-700"
+                    currentPage={commentsMeta.current_page}
+                    summary={t("post.details.pagination", {
+                      currentPage: commentsMeta.current_page,
+                      lastPage: commentsMeta.last_page,
+                    })}
+                    hasPrevious={Boolean(commentsMeta.prev_page_url)}
+                    hasNext={Boolean(commentsMeta.next_page_url)}
+                    onPrevious={() => void loadComments(commentsMeta.prev_page_url || undefined)}
+                    onNext={() => void loadComments(commentsMeta.next_page_url || undefined)}
+                  />
                 )}
               </section>
             </div>
@@ -427,6 +414,6 @@ export function PostDetailsModal({ isOpen, postId, onClose }: PostDetailsModalPr
           void loadComments();
         }}
       />
-    </div>
+    </ModalDialog>
   );
 }

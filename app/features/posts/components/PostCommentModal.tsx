@@ -1,10 +1,11 @@
-import { type ChangeEvent, type FormEvent, useEffect, useState } from "react";
+import { type ChangeEvent, type FormEvent, useEffect, useId, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import { getFirstApiError, getReadableError } from "~/features/auth/auth-errors";
 import { postService } from "~/features/posts/post-service";
 import type { CommentModalProps, CreateCommentPayload } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
+import { ModalDialog } from "~/shared/components/ModalDialog";
 
 const emptyFormState = {
   description: "",
@@ -14,6 +15,8 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState(emptyFormState.description);
+  const titleId = useId();
+  const descriptionId = useId();
 
   useEffect(() => {
     if (!isOpen) {
@@ -62,22 +65,27 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
-
-      <div className="relative z-10 mx-4 w-full max-w-md">
-        <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
+    <ModalDialog
+      isOpen={isOpen}
+      onClose={onClose}
+      titleId={titleId}
+      descriptionId={descriptionId}
+      panelClassName="max-w-md"
+    >
+      <div className="overflow-hidden rounded-2xl bg-white shadow-2xl dark:bg-gray-800">
           <div className="app-card-header p-6 text-white">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-bold">{t("post.comments.title")}</h2>
+              <h2 id={titleId} className="text-2xl font-bold">{t("post.comments.title")}</h2>
               <button
                 onClick={onClose}
+                type="button"
                 className="text-white/80 transition-colors hover:text-white"
+                aria-label={t("post.create.cancel")}
               >
                 <Icon name="x" className="h-6 w-6" />
               </button>
             </div>
-            <p className="mt-2 opacity-90">{t("post.comments.description")}</p>
+            <p id={descriptionId} className="mt-2 opacity-90">{t("post.comments.description")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6 p-6">
@@ -91,6 +99,7 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
                 onChange={handleChange}
                 rows={5}
                 placeholder={t("post.comments.placeholder")}
+                data-autofocus="true"
                 className="w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-3 outline-none transition-all focus:ring-2 focus:ring-indigo-500 dark:border-gray-600 dark:bg-gray-700"
               />
             </div>
@@ -113,8 +122,7 @@ export function PostCommentModal({ isOpen, postId, onClose, onCreated }: Comment
               </button>
             </div>
           </form>
-        </div>
       </div>
-    </div>
+    </ModalDialog>
   );
 }

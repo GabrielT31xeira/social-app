@@ -1,39 +1,39 @@
 {
   "info": {
-    "title": "Sobre Mim",
+    "title": "Sobre mim",
     "name": "Gabriel Teixeira de Carvalho",
     "contact": "Contato",
     "email": "Email:",
     "githubAria": "Perfil do GitHub",
     "linkedinAria": "Perfil do LinkedIn",
-    "socialLinks": "Redes Sociais",
+    "socialLinks": "Redes sociais",
     "notice": {
       "title": "Sobre este projeto",
-      "description": "Este projeto utiliza a API publica jsonplaceholder.typicode para demonstrar requisicoes HTTP e integracao de dados em React. Foi desenvolvido com fins educacionais para aprender React e suas aplicacoes praticas.",
-      "linkText": "JSONPlaceholder"
+      "description": "Este projeto usa uma API própria para autenticação, posts, comentários, reações e perfil do usuário. Ele foi desenvolvido para praticar arquitetura frontend moderna com React e integração real com backend.",
+      "linkText": "Explorar integração"
     }
   },
   "welcome": {
     "title": "Bem-vindo",
-    "subtitle": "Explore um projeto moderno com React, Tailwind CSS e mais",
+    "subtitle": "Explore uma aplicação social moderna com React, Tailwind CSS e integração com API",
     "home": "Home",
     "features": {
       "title": "Funcionalidades",
-      "item1": "Autenticacao multi-idioma (PT-BR e Ingles)",
-      "item2": "Tema escuro e claro personalizavel",
+      "item1": "Autenticação multi-idioma (PT-BR e Inglês)",
+      "item2": "Tema escuro e claro personalizável",
       "item3": "Design responsivo com Tailwind CSS",
-      "item4": "Integracao com APIs externas"
+      "item4": "Integração com API própria"
     },
     "integration": {
-      "title": "Integracao com JSONPlaceholder",
-      "description": "Este projeto integra a API publica JSONPlaceholder, permitindo praticar requisicoes HTTP, gerenciamento de dados e consumo de APIs em uma aplicacao React real.",
-      "link": "Conhecer JSONPlaceholder"
+      "title": "Integração com API",
+      "description": "A aplicação consome uma API própria para autenticação, feed, comentários, reações e gerenciamento de perfil.",
+      "link": "Ver integração"
     },
-    "cta": "Visualizar Perfil"
+    "cta": "Visualizar perfil"
   },
   "register": {
     "title": "Criar conta",
-    "subtitle": "Cadastre-se para comecar",
+    "subtitle": "Cadastre-se para começar",
     "name": "Nome completo",
     "namePlaceholder": "Seu nome",
     "char_name": "Nickname",
@@ -46,7 +46,7 @@
     "confirmPassword": "Confirmar senha",
     "confirmPlaceholder": "********",
     "submit": "Cadastrar",
-    "haveAccount": "Ja tem uma conta?",
+    "haveAccount": "Já tem uma conta?",
     "signIn": "Entrar",
     "success": "Cadastro realizado com sucesso! Redirecionando...",
     "passwordMismatch": "As senhas não coincidem.",
@@ -56,7 +56,7 @@
   "home": {
     "guest": "Visitante",
     "logout": "Sair",
-    "createPost": "Criar Post",
+    "createPost": "Criar post",
     "reloadPosts": "Atualizar posts",
     "footer": "(c) {{year}} {{name}} Blog",
     "post": {
@@ -104,26 +104,26 @@
   "post": {
     "create": {
       "main": "Novo post",
-      "description": "Descricao",
-      "title": "Titulo",
-      "content": "Conteudo",
+      "description": "Descrição",
+      "title": "Título",
+      "content": "Conteúdo",
       "contents": "Blocos de conteúdo",
       "blockLabel": "Bloco {{index}}",
       "addBlock": "Adicionar bloco",
       "removeBlock": "Remover bloco",
       "cancel": "Cancelar",
       "submit": "Enviar",
-      "sucess": "Publicacao enviada!"
+      "sucess": "Publicação enviada!"
     },
     "comments": {
-      "add": "Adicionar comentario",
-      "title": "Novo comentario",
-      "description": "Escreva um comentario para este post.",
-      "fieldLabel": "Comentario",
-      "placeholder": "Esse e um comentario de teste.",
-      "submit": "Enviar comentario",
-      "success": "Comentario enviado com sucesso!",
-      "error": "Erro ao adicionar comentario. Tente novamente.",
+      "add": "Adicionar comentário",
+      "title": "Novo comentário",
+      "description": "Escreva um comentário para este post.",
+      "fieldLabel": "Comentário",
+      "placeholder": "Esse é um comentário de teste.",
+      "submit": "Enviar comentário",
+      "success": "Comentário enviado com sucesso!",
+      "error": "Erro ao adicionar comentário. Tente novamente.",
       "loadErrorToast": "Falha ao carregar comentários",
       "reactionError": "Erro ao atualizar a reação do comentário.",
       "delete": {
@@ -158,8 +158,8 @@
     "feed": {
       "loadErrorToast": "Falha ao carregar posts",
       "loadErrorTitle": "Erro ao carregar posts",
-      "emptyTitle": "Nenhum post disponivel",
-      "emptyDescription": "Nao ha posts para exibir no momento.",
+      "emptyTitle": "Nenhum post disponível",
+      "emptyDescription": "Não há posts para exibir no momento.",
       "sortLabel": "Ordenar por",
       "sort": {
         "recent": "Mais recentes",
@@ -167,28 +167,28 @@
         "worstRated": "Pior avaliados"
       },
       "badge": "Post",
-      "commentsCount": "{{count}} comentarios",
-      "pagination": "Pagina {{currentPage}} de {{lastPage}} Total: {{total}} posts",
+      "commentsCount": "{{count}} comentários",
+      "pagination": "Página {{currentPage}} de {{lastPage}} Total: {{total}} posts",
       "openDetails": "Ver detalhes"
     },
     "details": {
       "title": "Detalhes do post",
-      "subtitle": "Veja o conteudo completo e os comentarios deste post.",
+      "subtitle": "Veja o conteúdo completo e os comentários deste post.",
       "blockLabel": "Bloco {{index}}",
       "emptyContent": "Este post não possui blocos de conteúdo.",
       "loadErrorToast": "Falha ao carregar detalhes do post",
       "loadErrorTitle": "Erro ao carregar detalhes do post",
-      "commentsTitle": "Comentarios",
-      "commentsCount": "{{total}} comentarios",
-      "emptyComments": "Nenhum comentario neste post ainda.",
-      "pagination": "Pagina {{currentPage}} de {{lastPage}}"
+      "commentsTitle": "Comentários",
+      "commentsCount": "{{total}} comentários",
+      "emptyComments": "Nenhum comentário neste post ainda.",
+      "pagination": "Página {{currentPage}} de {{lastPage}}"
     }
   },
   "common": {
     "loading": "Carregando...",
     "retry": "Tentar novamente",
     "previous": "Anterior",
-    "next": "Proximo"
+    "next": "Próximo"
   },
   "theme": {
     "loading": "Tema",
@@ -206,14 +206,14 @@
   },
   "login": {
     "title": "Bem-vindo de volta",
-    "subtitle": "Faca login na sua conta",
+    "subtitle": "Faça login na sua conta",
     "char_name": "Nome do personagem",
     "char_namePlaceholder": "Seu nome de personagem",
     "password": "Senha",
     "passwordPlaceholder": "********",
     "forgotPassword": "Esqueceu a senha?",
     "submit": "Entrar",
-    "noAccount": "Nao tem uma conta?",
+    "noAccount": "Não tem uma conta?",
     "signUp": "Cadastre-se",
     "fieldsRequired": "Preencha todos os campos",
     "success": "Login realizado com sucesso! Redirecionando...",

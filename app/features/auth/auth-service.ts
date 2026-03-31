@@ -1,4 +1,5 @@
 import apiClient from "~/services/api/apiClient";
+import { normalizeApiError } from "~/services/api/api-errors";
 import type { ApiResult } from "~/services/api/responses";
 import { clearSession, getStoredUser, storeSession, updateStoredUser } from "~/features/auth/auth-storage";
 import type { LoginData, LoginPayload, MeResponseData, RegisterPayload, User } from "~/features/auth/types";
@@ -29,11 +30,8 @@ export const authService = {
       }
 
       return result;
-    } catch (error: any) {
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao fazer login!",
-      };
+    } catch (error: unknown) {
+      throw normalizeApiError(error, "Erro ao fazer login!");
     }
   },
 
@@ -56,11 +54,8 @@ export const authService = {
         },
       });
       return response.data;
-    } catch (error: any) {
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao fazer cadastro!",
-      };
+    } catch (error: unknown) {
+      throw normalizeApiError(error, "Erro ao fazer cadastro!");
     }
   },
 
@@ -69,12 +64,9 @@ export const authService = {
       const response = await apiClient.post<ApiResult<null>>("logout", {});
       clearSession();
       return response.data;
-    } catch (error: any) {
+    } catch (error: unknown) {
       clearSession();
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao fazer logout!",
-      };
+      throw normalizeApiError(error, "Erro ao fazer logout!");
     }
   },
 
@@ -85,11 +77,8 @@ export const authService = {
         updateStoredUser(mapMeToStoredUser(response.data.data));
       }
       return response.data;
-    } catch (error: any) {
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao carregar perfil!",
-      };
+    } catch (error: unknown) {
+      throw normalizeApiError(error, "Erro ao carregar perfil!");
     }
   },
 
@@ -103,11 +92,8 @@ export const authService = {
       }
 
       return response.data;
-    } catch (error: any) {
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao remover avatar!",
-      };
+    } catch (error: unknown) {
+      throw normalizeApiError(error, "Erro ao remover avatar!");
     }
   },
 
@@ -123,11 +109,8 @@ export const authService = {
       });
 
       return response.data;
-    } catch (error: any) {
-      throw error.response?.data || {
-        success: false,
-        message: "Erro ao enviar avatar!",
-      };
+    } catch (error: unknown) {
+      throw normalizeApiError(error, "Erro ao enviar avatar!");
     }
   },
 

@@ -2,30 +2,30 @@ import { type MouseEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 import { toast } from "react-toastify";
-import authService from "~/features/auth/auth-service";
-import type { User } from "~/features/auth/types";
+import { useAuth } from "~/features/auth/AuthProvider";
 import { PostDeleteConfirmModal } from "~/features/posts/components/PostDeleteConfirmModal";
 import { PostDetailsModal } from "~/features/posts/components/PostDetailsModal";
+import { PostSortSelect } from "~/features/posts/components/PostSortSelect";
 import { usePosts } from "~/features/posts/hooks/usePosts";
 import { postService } from "~/features/posts/post-service";
 import type { PostSort } from "~/features/posts/types";
 import { Icon } from "~/shared/components/Icons";
+import { PaginationControls } from "~/shared/components/PaginationControls";
 
 interface PostFeedProps {
   maxPosts?: number;
   reloadKey?: number;
-  currentUser?: User | null;
 }
 
-export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps) {
+export function PostFeed({ maxPosts, reloadKey = 0 }: PostFeedProps) {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const [sort, setSort] = useState<PostSort>("recent");
   const { posts, meta, links, loading, error, reloadPosts, updatePost } = usePosts({
     maxPosts,
     reloadKey,
     sort,
   });
-  const user = currentUser ?? authService.getUser();
   const [selectedPostId, setSelectedPostId] = useState<string | null>(null);
   const [postPendingDelete, setPostPendingDelete] = useState<{ id: string; title: string } | null>(
     null,
@@ -141,23 +141,7 @@ export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps
   return (
     <div className="mx-auto mt-8 max-w-2xl px-4">
       <div className="mb-6 flex justify-end">
-        <label className="flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-gray-300">
-          {t("post.feed.sortLabel")}
-          <span className="relative">
-            <select
-              value={sort}
-              onChange={(event) => setSort(event.target.value as PostSort)}
-              className="appearance-none rounded-lg border border-gray-200 bg-white px-3 py-2 pr-9 text-sm text-gray-700 outline-none transition-colors focus:border-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200"
-            >
-              <option value="recent">{t("post.feed.sort.recent")}</option>
-              <option value="best_rated">{t("post.feed.sort.bestRated")}</option>
-              <option value="worst_rated">{t("post.feed.sort.worstRated")}</option>
-            </select>
-            <span className="pointer-events-none absolute inset-y-0 right-4 flex items-center text-gray-500 dark:text-gray-400">
-              <Icon name="chevronDown" className="h-4 w-4" />
-            </span>
-          </span>
-        </label>
+        <PostSortSelect value={sort} onChange={setSort} />
       </div>
 
       <div className="space-y-8">
@@ -268,39 +252,18 @@ export function PostFeed({ maxPosts, reloadKey = 0, currentUser }: PostFeedProps
 
       {meta && (
         <div className="mt-12">
-          <div className="flex flex-col items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800 sm:flex-row">
-            <div className="text-sm text-gray-600 dark:text-gray-400">
-              {t("post.feed.pagination", {
-                currentPage: meta.current_page,
-                lastPage: meta.last_page,
-                total: meta.total,
-              })}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => reloadPosts(links?.prev || undefined)}
-                disabled={!links?.prev}
-                className="inline-flex items-center gap-2 rounded-lg border border-gray-200 bg-gray-50 px-4 py-2 text-gray-700 transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-              >
-                <Icon name="chevronLeft" className="h-4 w-4" />
-                {t("common.previous")}
-              </button>
-
-              <div className="rounded-lg bg-indigo-50 px-3 py-2 text-sm font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
-                {meta.current_page}
-              </div>
-
-              <button
-                onClick={() => reloadPosts(links?.next || undefined)}
-                disabled={!links?.next}
-                className="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 font-medium text-white transition-all disabled:cursor-not-allowed disabled:opacity-40 hover:bg-indigo-700"
-              >
-                {t("common.next")}
-                <Icon name="chevronRight" className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          <PaginationControls
+            currentPage={meta.current_page}
+            summary={t("post.feed.pagination", {
+              currentPage: meta.current_page,
+              lastPage: meta.last_page,
+              total: meta.total,
+            })}
+            hasPrevious={Boolean(links?.prev)}
+            hasNext={Boolean(links?.next)}
+            onPrevious={() => void reloadPosts(links?.prev || undefined)}
+            onNext={() => void reloadPosts(links?.next || undefined)}
+          />
         </div>
       )}
     </div>
